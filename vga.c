@@ -1,0 +1,42 @@
+#include <stdint.h>
+
+#include "vga.h"
+
+size_t vga_x;
+size_t vga_y;
+
+uint8_t vga_color;
+uint16_t *vga_buf;
+
+uint8_t vga_init()
+{
+    vga_x = 0;
+    vga_y = 0;
+
+    vga_setcol(VGA_LGRAY, VGA_BLACK);
+    vga_buf = (uint16_t*)0xb800;
+
+    for(int i = 0; i < VGA_SIZE; i++)
+    {
+        vga_buf[i] = vga_color << 8 | ' ';
+    }
+
+    return 0;
+}
+
+void vga_putchar(char c)
+{
+    vga_buf[vga_coordtoi()] = c;
+    if(++vga_x >= VGA_WIDTH)
+    {
+        vga_x = 0;
+        if(++vga_y >= VGA_HEIGHT)
+            vga_y = 0;
+    }
+}
+
+void vga_puts(char *s)
+{
+    while(*s) vga_putchar(*(s++));
+}
+
