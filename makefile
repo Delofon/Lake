@@ -1,6 +1,6 @@
 .RECIPEPREFIX = >
 
-CC := i686-elf-gcc1
+CC := i686-elf-gcc
 AS := nasm
 
 CFLAGS := -O2 -std=c99 -ffreestanding -T linker.ld -nostdlib
@@ -11,19 +11,26 @@ ASFLAGS := -felf32
 CWARNINGS := -Wall -Wextra -Werror=shadow -Wswitch-enum -pedantic
 CNOWARNINGS := -Wno-strict-prototypes
 
-SOURCES := kernel.c vga.c string.c
-ASMSOURCES := boot.asm
+SOURCES := $(wildcard *.c)
+OBJECTS := $(patsubst %.c, build/%.o, $(SOURCES))
 
-kernel: kernel.o boot.o
-> $(CC) $(CFLAGS) -o kernel kernel.o boot.o $(LIBS)
+ASMSOURCES := $(wildcard *.asm)
+ASMOBJECTS := $(patsubst %.asm, build/%.o, $(ASMSOURCES))
 
-kernel.o: $(SOURCES)
-> $(CC) $(CFLAGS) $(CWARNINGS) $(CNOWARNINGS) -c -o kernel.o $(SOURCES)
+kernel: $(OBJECTS) $(ASMOBJECTS)
+> $(CC) $(CFLAGS) -o build/kernel $^ $(LIBS)
 
-boot.o: boot.asm
-> $(AS) $(ASFLAGS) -o boot.o boot.asm
+%.o: %.c mkdir
+> $(CC) $(CFLAGS) $(CWARNINGS) $(CNOWARNINGS) -c -o build/$@ $<
+
+%.o: %.asm mkdir
+> $(AS) $(ASFLAGS) -o build/$@ $<
+
+.PHONY: mkdir
+mkdir:
+> mkdir -p build
 
 .PHONY: clean
 clean:
-> rm -rf build
+> rm -rf build/
 

@@ -1,4 +1,4 @@
-#if 1
+#if 0
 #undef __linux__
 #define __i386__
 #endif
@@ -15,6 +15,7 @@
 
 void kmain()
 {
+    vga_init();
     vga_puts("Lake v0.0.1");
 }
 
