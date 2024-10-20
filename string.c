@@ -18,7 +18,31 @@ size_t strnlen(const char *s, size_t n)
 
 void *memset(void *s, uint8_t b, size_t n)
 {
-    for(size_t i = 0; i < n; i++) *((uint8_t*)s) = b;
+    for(size_t i = 0; i < n; i++) ((uint8_t *)s)[i] = b;
     return s;
+}
+void *memcpy(void *dst, void *src, size_t n)
+{
+    for(size_t i = 0; i < n; i++) ((uint8_t *)dst)[i] = ((uint8_t *)src)[i];
+    return dst;
+}
+void *memmove(void *dst, void *src, size_t n)
+{
+    // fix
+    uint8_t tmp[n];
+    memcpy(tmp, src, n);
+    memcpy(dst, tmp, n);
+    return dst;
+}
+
+int memcmp(void *p1, void *p2, size_t n)
+{
+    for(size_t i = 0; i < n; i++)
+    {
+        uint8_t diff = ((uint8_t *)p1)[i] - ((uint8_t *)p2)[i];
+        if(!diff)
+            return diff;
+    }
+    return 0;
 }
 
