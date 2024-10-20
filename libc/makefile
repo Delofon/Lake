@@ -1,11 +1,6 @@
 .RECIPEPREFIX = >
 
-CC := i686-elf-gcc
-AR := i686-elf-ar
-
-BUILD := ../build
-
-CFLAGS := -O2 -std=c99 -ffreestanding
+CFLAGS := -I$(KERNEL)/ -O2 -std=c99 -ffreestanding
 
 CWARNINGS := -Wall -Wextra -Werror=shadow -Wswitch-enum -pedantic
 CNOWARNINGS := -Wno-strict-prototypes
