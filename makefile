@@ -17,14 +17,30 @@ OBJECTS := $(patsubst %.c, build/%.o, $(SOURCES))
 ASMSOURCES := $(wildcard *.asm)
 ASMOBJECTS := $(patsubst %.asm, build/%.o, $(ASMSOURCES))
 
-kernel: $(OBJECTS) $(ASMOBJECTS)
-> $(CC) $(CFLAGS) -o build/kernel $^ $(LIBS)
+.PHONY: default
+default: mkdir build/kernel
 
-%.o: %.c mkdir
-> $(CC) $(CFLAGS) $(CWARNINGS) $(CNOWARNINGS) -c -o build/$@ $<
+build/kernel: $(OBJECTS) $(ASMOBJECTS)
+> $(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
-%.o: %.asm mkdir
-> $(AS) $(ASFLAGS) -o build/$@ $<
+build/%.o: %.c
+> $(CC) $(CFLAGS) $(CWARNINGS) $(CNOWARNINGS) -c -o $@ $<
+
+build/%.o: %.asm
+> $(AS) $(ASFLAGS) -o $@ $<
+
+.PHONY: grub-iso
+grub-iso: build/kernel
+> grub-file --is-x86-multiboot build/kernel
+>
+> mkdir -p build/iso
+> mkdir -p build/iso/boot
+> mkdir -p build/iso/boot/grub
+>
+> cp build/kernel build/iso/boot/kernel
+> cp grub.cfg     build/iso/boot/grub/grub.cfg
+>
+> grub-mkrescue -o build/lake.iso build/iso
 
 .PHONY: mkdir
 mkdir:

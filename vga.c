@@ -14,7 +14,7 @@ uint8_t vga_init()
     vga_y = 0;
 
     vga_setcol(VGA_LGRAY, VGA_BLACK);
-    vga_buf = (uint16_t*)0xb800;
+    vga_buf = (uint16_t*)0xb8000;
 
     for(int i = 0; i < VGA_SIZE; i++)
     {
@@ -26,7 +26,7 @@ uint8_t vga_init()
 
 void vga_putchar(char c)
 {
-    vga_buf[vga_coordtoi()] = c;
+    vga_buf[vga_coordtoi()] = vga_color << 8 | c;
     if(++vga_x >= VGA_WIDTH)
     {
         vga_x = 0;
