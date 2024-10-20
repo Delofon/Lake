@@ -1,5 +1,6 @@
 #include <stdint.h>
 
+#include "string.h"
 #include "vga.h"
 
 size_t vga_x;
@@ -40,5 +41,10 @@ void vga_putchar(char c)
 void vga_puts(char *s)
 {
     while(*s) vga_putchar(*(s++));
+}
+
+void vga_scroll()
+{
+    for(size_t i = 0; i < VGA_HEIGHT-1; i++) memcpy(vga_buf+i*VGA_WIDTH, vga_buf+(i+1)*VGA_WIDTH, VGA_WIDTH);
 }
 
