@@ -28,20 +28,13 @@ void vga_putchar(char c)
 {
     if(c == '\n')
     {
-        vga_x = 0;
-        if(++vga_y >= VGA_HEIGHT)
-            vga_y = 0;
-
+        vga_linefeed();
         return;
     }
 
     vga_buf[vga_coordtoi()] = vga_color << 8 | c;
     if(++vga_x >= VGA_WIDTH)
-    {
-        vga_x = 0;
-        if(++vga_y >= VGA_HEIGHT)
-            vga_y = 0;
-    }
+        vga_linefeed();
 }
 
 void vga_puts(char *s)

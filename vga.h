@@ -44,6 +44,13 @@ static inline size_t vga_coordtoi()
     return vga_y * VGA_WIDTH + vga_x;
 }
 
+static inline void vga_linefeed()
+{
+    vga_x = 0;
+    if(++vga_y >= VGA_HEIGHT)
+        vga_y = 0;
+}
+
 uint8_t vga_init();
 void vga_putchar(char c);
 void vga_puts(char *s);
