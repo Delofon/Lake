@@ -26,6 +26,15 @@ uint8_t vga_init()
 
 void vga_putchar(char c)
 {
+    if(c == '\n')
+    {
+        vga_x = 0;
+        if(++vga_y >= VGA_HEIGHT)
+            vga_y = 0;
+
+        return;
+    }
+
     vga_buf[vga_coordtoi()] = vga_color << 8 | c;
     if(++vga_x >= VGA_WIDTH)
     {

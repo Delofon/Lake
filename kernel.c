@@ -11,6 +11,6 @@
 void kmain()
 {
     vga_init();
-    vga_puts("Lake v0.0.1");
+    vga_puts("Lake v0.0.1\nNewline test");
 }
 
