@@ -1,8 +1,3 @@
-#if 0
-#undef __linux__
-#define __i386__
-#endif
-
 #ifdef __linux__
 #error Wrong compiler (linux)
 #endif // __linux__
