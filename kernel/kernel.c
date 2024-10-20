@@ -6,7 +6,8 @@
 #error Wrong compiler (no i386)
 #endif // __i386__
 
-#include <vga.h>
+// TODO: remove
+#include "arch/i386/vga.h"
 
 void kmain()
 {
