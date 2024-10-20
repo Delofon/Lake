@@ -1,6 +1,6 @@
 #include <stdint.h>
+#include <string.h>
 
-#include "string.h"
 #include "vga.h"
 
 size_t vga_x;

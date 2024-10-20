@@ -1,33 +1,13 @@
 .RECIPEPREFIX = >
 
-CC := i686-elf-gcc
-AS := nasm
-
-CFLAGS := -O2 -std=c99 -ffreestanding -T linker.ld -nostdlib
-LIBS := -lgcc
-
-ASFLAGS := -felf32
-
-CWARNINGS := -Wall -Wextra -Werror=shadow -Wswitch-enum -pedantic
-CNOWARNINGS := -Wno-strict-prototypes
-
-SOURCES := $(wildcard *.c)
-OBJECTS := $(patsubst %.c, build/%.o, $(SOURCES))
-
-ASMSOURCES := $(wildcard *.asm)
-ASMOBJECTS := $(patsubst %.asm, build/%.o, $(ASMSOURCES))
-
 .PHONY: default
 default: mkdir build/kernel
 
-build/kernel: $(OBJECTS) $(ASMOBJECTS)
-> $(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+build/kernel: build/libk.a
+> make -C kernel/arch/i386
 
-build/%.o: %.c
-> $(CC) $(CFLAGS) $(CWARNINGS) $(CNOWARNINGS) -c -o $@ $<
-
-build/%.o: %.asm
-> $(AS) $(ASFLAGS) -o $@ $<
+build/libk.a:
+> make -C libc
 
 .PHONY: grub-iso
 grub-iso: build/kernel
