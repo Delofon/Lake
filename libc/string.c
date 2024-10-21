@@ -28,10 +28,9 @@ void *memcpy(void *dst, void *src, size_t n)
 }
 void *memmove(void *dst, void *src, size_t n)
 {
-    // TODO: fix
-    uint8_t tmp[n];
-    memcpy(tmp, src, n);
-    memcpy(dst, tmp, n);
+    if(dst < src)
+        return memcpy(dst, src, n);
+    for(size_t i = n-1; i >= 0; i--) ((uint8_t *)dst)[i] = ((uint8_t *)src)[i];
     return dst;
 }
 
