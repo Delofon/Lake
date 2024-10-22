@@ -34,7 +34,7 @@ grub-iso: build/kernel
 > grub-mkrescue -o build/lake.iso build/iso
 
 .PHONY: qemu
-qemu: build/kernel
+qemu: default
 > qemu-system-i386 -kernel build/kernel
 
 .PHONY: mkdir

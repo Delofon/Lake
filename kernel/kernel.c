@@ -18,5 +18,7 @@ void kmain()
     printf("Testier test\n");
     vga_setcol(VGA_LGRAY, VGA_BLACK);
     printf("printf test\n");
+    printf("This should print 69: %d\n", 69);
+    printf("Multiple %s", "strings?");
 }
 
