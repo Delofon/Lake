@@ -7,7 +7,9 @@
 #endif // __i386__
 
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
+#include <limits.h>
 
 #include <arch/i386/vga.h>
 
@@ -26,5 +28,11 @@ void kmain()
     int b = strlen(s);
     int printf_b = printf("%s", s);
     printf("strlen(s) = %d, printf_b = %d\n", b, printf_b);
+
+    printf("\n");
+
+    printf("INT_MAX: %d\n", INT_MAX);
+    printf("INT_MIN: %d\n", INT_MIN);
+    printf(" -69420: %d\n", -69420);
 }
 

@@ -23,40 +23,34 @@ int printf(const char *format, ...)
     return ret;
 }
 
-static inline int vprintf_int(va_list vargs)
+static inline int vprintf_int(int d)
 {
     int bytes = 0;
-    int d = va_arg(vargs, int);
-    int pow = 1;
+    int sgn = 1;
+    char s[11] = {0};
+    char *p = s+9;
 
     if(d < 0)
     {
         vga_putchar('-');
-        d *= -1;
+        sgn = -1;
         bytes++;
     }
 
+    while(d != 0)
     {
-        int dd = d;
-        for(; dd > 0; pow *= 10)
-            dd /= 10;
-        pow /= 10;
-    }
-
-    while(pow != 0)
-    {
-        char c = (d / pow) % 10;
-        pow /= 10;
-        vga_putchar(c + '0');
+        *(p--) = (d % 10)*sgn + '0';
+        d /= 10;
         bytes++;
     }
+
+    vga_puts(++p);
 
     return bytes;
 }
 
-static inline int vprintf_string(va_list vargs)
+static inline int vprintf_string(const char *s)
 {
-    const char *s = va_arg(vargs, const char *);
     int bytes = strlen(s); // unsafe?
     vga_puts(s);
     return bytes;
@@ -74,11 +68,11 @@ int vprintf(const char *format, va_list vargs)
             switch(c1)
             {
                 case 'd':
-                    bytes += vprintf_int(vargs);
+                    bytes += vprintf_int(va_arg(vargs, int));
                     format++;
                     break;
                 case 's':
-                    bytes += vprintf_string(vargs);
+                    bytes += vprintf_string(va_arg(vargs, const char *));
                     format++;
                     break;
                 case '%':

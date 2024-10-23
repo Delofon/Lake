@@ -9,7 +9,8 @@ ASMOBJECTS := $(patsubst %.asm, $(BUILD)/%.o, $(ASMSOURCES))
 .PHONY: default
 default: $(BUILD)/kernel
 
-$(BUILD)/kernel: $(OBJECTS) $(ASMOBJECTS)
+.PHONY: $(BUILD)/libk.a
+$(BUILD)/kernel: $(OBJECTS) $(ASMOBJECTS) $(BUILD)/libk.a
 > $(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 > grub-file --is-x86-multiboot $(BUILD)/kernel
 
