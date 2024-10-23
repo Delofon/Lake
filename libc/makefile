@@ -1,10 +1,5 @@
 .RECIPEPREFIX = >
 
-CFLAGS := -I$(KERNEL)/ -O2 -std=c99 -ffreestanding
-
-CWARNINGS := -Wall -Wextra -Werror=shadow -Wswitch-enum -pedantic
-CNOWARNINGS := -Wno-strict-prototypes
-
 SOURCES := $(wildcard *.c)
 OBJECTS := $(patsubst %.c, $(BUILD)/%.o, $(SOURCES))
 

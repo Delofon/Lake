@@ -7,6 +7,7 @@
 #endif // __i386__
 
 #include <stdio.h>
+#include <string.h>
 
 #include <arch/i386/vga.h>
 
@@ -19,6 +20,11 @@ void kmain()
     vga_setcol(VGA_LGRAY, VGA_BLACK);
     printf("printf test\n");
     printf("This should print 69: %d\n", 69);
-    printf("Multiple %s", "strings?");
+    printf("Multiple %s", "strings?\n");
+
+    char *s = "Bytes sanity check\n";
+    int b = strlen(s);
+    int printf_b = printf("%s", s);
+    printf("strlen(s) = %d, printf_b = %d\n", b, printf_b);
 }
 

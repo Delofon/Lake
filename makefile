@@ -8,6 +8,13 @@ BUILD := $(CURDIR)/build
 KERNEL := $(CURDIR)/kernel
 LIBC := $(CURDIR)/libc
 
+ASFLAGS := -felf32
+CFLAGS := -I$(LIBC)/ -I$(KERNEL)/ -O2 -std=c99 -ffreestanding -T linker.ld
+LIBS := -L$(BUILD)/ -lgcc -lk -nostdlib
+
+CWARNINGS := -Wall -Wextra -Werror=shadow -Wswitch-enum -pedantic
+CNOWARNINGS := -Wno-strict-prototypes
+
 export
 
 .PHONY: default
@@ -16,7 +23,6 @@ default: mkdir build/kernel
 .PHONY: build/kernel
 build/kernel: build/libk.a
 > $(MAKE) -C kernel/arch/i386
-> grub-file --is-x86-multiboot build/kernel
 
 .PHONY: build/libk.a
 build/libk.a:
