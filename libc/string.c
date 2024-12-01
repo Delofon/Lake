@@ -26,11 +26,12 @@ void *memcpy(void *dst, void *src, size_t n)
     for(size_t i = 0; i < n; i++) ((uint8_t *)dst)[i] = ((uint8_t *)src)[i];
     return dst;
 }
+
 void *memmove(void *dst, void *src, size_t n)
 {
     if(dst < src)
         return memcpy(dst, src, n);
-    for(size_t i = n-1; i >= 0; i--) ((uint8_t *)dst)[i] = ((uint8_t *)src)[i];
+    for(size_t i = 0; i < n; i++) ((uint8_t *)dst)[n-(i+1)] = ((uint8_t *)src)[n-(i+1)];
     return dst;
 }
 
