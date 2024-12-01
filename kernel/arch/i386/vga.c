@@ -18,14 +18,12 @@ uint8_t vga_init()
     vga_buf = (uint16_t*)0xb8000;
 
     for(int i = 0; i < VGA_SIZE; i++)
-    {
         vga_buf[i] = vga_color << 8 | ' ';
-    }
 
     return 0;
 }
 
-void vga_putchar(char c)
+void vga_putchar(const char c)
 {
     if(c == '\n')
     {
@@ -33,18 +31,33 @@ void vga_putchar(char c)
         return;
     }
 
-    vga_buf[vga_coordtoi()] = vga_color << 8 | c;
-    if(++vga_x >= VGA_WIDTH)
+    if(vga_x >= VGA_WIDTH)
         vga_linefeed();
+
+    vga_buf[vga_coordtoi()] = vga_color << 8 | c;
+    vga_x++;
 }
 
-void vga_puts(char *s)
+void vga_puts(const char *s)
 {
-    while(*s) vga_putchar(*(s++));
+    while(*s)
+        vga_putchar(*(s++));
+}
+
+void vga_linefeed()
+{
+    vga_x = 0;
+    vga_y++;
+
+    if(vga_y >= VGA_HEIGHT)
+        vga_scroll();
 }
 
 void vga_scroll()
 {
-    memmove(vga_buf, vga_buf+VGA_WIDTH, VGA_WIDTH*(VGA_HEIGHT-1));
+    vga_y--;
+    memmove(vga_buf, vga_buf+VGA_WIDTH, VGA_WIDTH*(VGA_HEIGHT-1)*sizeof(vga_buf));
+    for(size_t i = VGA_WIDTH * (VGA_HEIGHT-1); i < VGA_SIZE; i++)
+        vga_buf[i] = vga_color << 8 | ' ';
 }
 

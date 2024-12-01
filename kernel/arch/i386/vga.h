@@ -35,8 +35,9 @@ extern uint8_t vga_color;
 extern uint16_t *vga_buf;
 
 uint8_t vga_init();
-void vga_putchar(char c);
-void vga_puts(char *s);
+void vga_putchar(const char c);
+void vga_puts(const char *s);
+void vga_linefeed();
 void vga_scroll();
 
 static inline void vga_setcol(vgacol_e fg, vgacol_e bg)
@@ -49,11 +50,5 @@ static inline size_t vga_coordtoi()
     return vga_y * VGA_WIDTH + vga_x;
 }
 
-static inline void vga_linefeed()
-{
-    vga_x = 0;
-    if(++vga_y >= VGA_HEIGHT)
-        vga_scroll();
-}
 #endif // VGA_H_
 
