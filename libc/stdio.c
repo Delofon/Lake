@@ -9,6 +9,7 @@
 int putchar(int c)
 {
     vga_putchar(c);
+    return c;
 }
 
 int printf(const char *format, ...)
@@ -26,25 +27,35 @@ int printf(const char *format, ...)
 static inline int vprintf_int(int d)
 {
     int bytes = 0;
-    int sgn = 1;
     char s[11] = {0};
-    char *p = s+9;
+    s[0] = '0';
+
+    char *p = s;
+    if(d == 0) bytes++;
 
     if(d < 0)
     {
+        d = -d;
         vga_putchar('-');
-        sgn = -1;
         bytes++;
     }
 
     while(d != 0)
     {
-        *(p--) = (d % 10)*sgn + '0';
+        *(p++) = (d % 10) + '0';
         d /= 10;
-        bytes++;
     }
 
-    vga_puts(++p);
+    size_t sz = p - s;
+    bytes += sz;
+    for(size_t i = 0; i < sz / 2; i++)
+    {
+        char tmp = s[i];
+        s[i] = s[sz - i - 1];
+        s[sz - i - 1] = tmp;
+    }
+
+    vga_puts(s);
 
     return bytes;
 }

@@ -47,5 +47,6 @@ void kmain()
     printf("INT_MIN: %d\n", INT_MIN);
     printf(" -69420: %d\n", -69420);
     printf("IM * -1: %d\n", (INT_MIN) * -1);
+    printf("This should print zero: %d\n", 0);
 }
 
