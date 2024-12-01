@@ -13,6 +13,16 @@
 
 #include <arch/i386/vga.h>
 
+#include "gdt.h"
+
+void protectedmode();
+
+void pre_kmain(uint64_t *gdtp, uint64_t *gdtp_end)
+{
+    setup_gdt(gdtp, gdtp_end);
+    protectedmode();
+}
+
 void kmain()
 {
     vga_init();
@@ -24,6 +34,8 @@ void kmain()
     printf("This should print 69: %d\n", 69);
     printf("Multiple %s", "strings?\n");
 
+    printf("\n");
+
     char *s = "Bytes sanity check\n";
     int b = strlen(s);
     int printf_b = printf("%s", s);
@@ -34,5 +46,6 @@ void kmain()
     printf("INT_MAX: %d\n", INT_MAX);
     printf("INT_MIN: %d\n", INT_MIN);
     printf(" -69420: %d\n", -69420);
+    printf("IM * -1: %d\n", (INT_MIN) * -1);
 }
 
