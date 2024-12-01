@@ -27,7 +27,7 @@ _start:
     push gdtp
 
     extern pre_kmain
-    call kmain
+    call pre_kmain
     add esp, 8
 
     extern kmain
