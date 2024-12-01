@@ -24,7 +24,7 @@ int printf(const char *format, ...)
     return ret;
 }
 
-static inline int vprintf_int(int d)
+static inline int vprintf_d(int d)
 {
     int bytes = 0;
     char s[11] = {0};
@@ -60,9 +60,43 @@ static inline int vprintf_int(int d)
     return bytes;
 }
 
-static inline int vprintf_string(const char *s)
+static inline int vprintf_x(int d)
 {
-    int bytes = strlen(s); // unsafe?
+    const char dig[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+
+    unsigned int ud = (unsigned int) d;
+
+    int bytes = 0;
+    char s[9] = {0};
+    s[0] = '0';
+
+    char *p = s;
+    if(ud == 0) bytes++;
+
+    while(ud != 0)
+    {
+        *(p++) = dig[ud & 0xf];
+        ud >>= 4;
+    }
+
+    size_t sz = p - s;
+    bytes += sz;
+
+    for(size_t i = 0; i < sz / 2; i++)
+    {
+        char tmp = s[i];
+        s[i] = s[sz - i - 1];
+        s[sz - i - 1] = tmp;
+    }
+
+    vga_puts(s);
+
+    return bytes;
+}
+
+static inline int vprintf_s(const char *s)
+{
+    int bytes = strlen(s); // we pray to all computer gods that the user supplied string is null-terminated
     vga_puts(s);
     return bytes;
 }
@@ -79,11 +113,15 @@ int vprintf(const char *format, va_list vargs)
             switch(c1)
             {
                 case 'd':
-                    bytes += vprintf_int(va_arg(vargs, int));
+                    bytes += vprintf_d(va_arg(vargs, int));
+                    format++;
+                    break;
+                case 'x':
+                    bytes += vprintf_x(va_arg(vargs, int));
                     format++;
                     break;
                 case 's':
-                    bytes += vprintf_string(va_arg(vargs, const char *));
+                    bytes += vprintf_s(va_arg(vargs, const char *));
                     format++;
                     break;
                 case '%':
