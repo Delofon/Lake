@@ -1,3 +1,5 @@
 -I./libc
 -I./kernel
+-D__i386__
+-U__linux__
 
