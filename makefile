@@ -9,10 +9,10 @@ KERNEL := $(CURDIR)/kernel
 LIBC := $(CURDIR)/libc
 
 ASFLAGS := -felf32
-CFLAGS := -I$(LIBC)/ -I$(KERNEL)/ -O2 -std=c99 -ffreestanding -T linker.ld
+CFLAGS := -I$(LIBC)/ -I$(KERNEL)/ -O2 -std=gnu99 -ffreestanding -T linker.ld
 LIBS := -L$(BUILD)/ -lgcc -lk -nostdlib
 
-CWARNINGS := -Wall -Wextra -Werror=shadow -Wswitch-enum -pedantic
+CWARNINGS := -Wall -Wextra -Werror=vla -Werror=shadow -Wswitch-enum -pedantic
 CNOWARNINGS := -Wno-strict-prototypes
 
 export
