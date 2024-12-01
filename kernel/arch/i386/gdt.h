@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 
-void setup_gdt(uint64_t *gdtp, uint64_t *gdtp_end);
-void encode_descriptor(uint64_t *descriptor, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags);
+void setup_gdt(uint8_t *gdtp);
 
 #endif // GDT_H_
 

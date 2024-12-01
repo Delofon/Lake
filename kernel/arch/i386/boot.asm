@@ -27,6 +27,11 @@ _start:
     extern kmain
     call kmain
 
+    jmp halt
+.end:
+
+global halt
+halt:
     cli
 .hang:
     hlt

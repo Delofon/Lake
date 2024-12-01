@@ -16,22 +16,33 @@
 #include "gdt.h"
 
 void protectedmode();
+void halt();
 
-extern uint64_t *gdtp;
-extern uint64_t *gdtp_end;
+extern uint8_t *gdtp;
 
 void pre_kmain()
 {
-    setup_gdt(gdtp, gdtp_end);
-    protectedmode();
+    vga_init();
+    setup_gdt(gdtp);
+    //protectedmode();
+
+    //halt();
 }
 
 void kmain()
 {
-    vga_init();
+    //vga_init();
 
-    printf("Lake v2\n\n");
+    //printf("Lake v2\n\n");
 
-    printf("Hex test: %x\n", 0xdeadbeef);
+    uint32_t *gdtw = (uint32_t *)gdtp;
+
+    printf("0x%x\n", (uint32_t)gdtp);
+    printf("pregdtp:   0x%x\n",   gdtw[-1]);
+    printf("   gdtp:   0x%x|%x\n", gdtw[1], gdtw[0]);
+    printf("   gdtp+1: 0x%x|%x\n", gdtw[3], gdtw[2]);
+    printf("   gdtp+2: 0x%x|%x\n", gdtw[5], gdtw[4]);
+    printf("   gdtp+3: 0x%x|%x\n", gdtw[7], gdtw[6]);
+    printf("   gdtp+4: 0x%x|%x\n", gdtw[9], gdtw[8]);
 }
 

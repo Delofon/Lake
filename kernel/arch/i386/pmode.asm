@@ -1,9 +1,10 @@
 section .data
 global gdtp
 global gdtp_end
+pre_gdtp:
+    dd 0x8badf00d
 gdtp:
     resq 5
-gdtp_end:
 
 section .text
 global protectedmode:function
