@@ -27,12 +27,12 @@ void encode_descriptor(uint64_t *descriptor, uint32_t base, uint32_t limit, uint
     uint64_t limit_16_19 = limit >> 16; // 19 - 16 + 1 = 4
 
     *descriptor |= limit_15;
-    *descriptor |= base_15 >> 16;
+    *descriptor |= base_15 << 16;
 
-    *descriptor |= base_16_23 >> 32;
-    *descriptor |= (uint64_t)access >> 40;
-    *descriptor |= limit_16_19 >> 48;
-    *descriptor |= (uint64_t)flags >> 52;
-    *descriptor |= base_24_31 >> 56;
+    *descriptor |= base_16_23 << 32;
+    *descriptor |= (uint64_t)access << 40;
+    *descriptor |= limit_16_19 << 48;
+    *descriptor |= (uint64_t)flags << 52;
+    *descriptor |= base_24_31 << 56;
 }
 

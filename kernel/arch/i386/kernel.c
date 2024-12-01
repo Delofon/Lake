@@ -17,7 +17,10 @@
 
 void protectedmode();
 
-void pre_kmain(uint64_t *gdtp, uint64_t *gdtp_end)
+extern uint64_t *gdtp;
+extern uint64_t *gdtp_end;
+
+void pre_kmain()
 {
     setup_gdt(gdtp, gdtp_end);
     protectedmode();
@@ -26,27 +29,9 @@ void pre_kmain(uint64_t *gdtp, uint64_t *gdtp_end)
 void kmain()
 {
     vga_init();
-    printf("Lake v0.0.1\nNewline test\n");
-    vga_setcol(VGA_RED, VGA_BLACK);
-    printf("Testier test\n");
-    vga_setcol(VGA_LGRAY, VGA_BLACK);
-    printf("printf test\n");
-    printf("This should print 69: %d\n", 69);
-    printf("Multiple %s", "strings?\n");
 
-    printf("\n");
+    printf("Lake v2\n\n");
 
-    char *s = "Bytes sanity check\n";
-    int b = strlen(s);
-    int printf_b = printf("%s", s);
-    printf("strlen(s) = %d, printf_b = %d\n", b, printf_b);
-
-    printf("\n");
-
-    printf("INT_MAX: %d\n", INT_MAX);
-    printf("INT_MIN: %d\n", INT_MIN);
-    printf(" -69420: %d\n", -69420);
-    printf("IM * -1: %d\n", (INT_MIN) * -1);
-    printf("This should print zero: %d\n", 0);
+    printf("Hex test: %x\n", 0xdeadbeef);
 }
 
