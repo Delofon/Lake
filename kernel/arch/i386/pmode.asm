@@ -1,11 +1,10 @@
 section .data
 global gdtp
-pre_gdtp:
     dd 0x8badf00d
 gdtp:
     resq 5
 gdtp_end:
-gdt_size: equ gdtp_end - gdtp
+gdt_size equ gdtp_end - gdtp
 
 gdtr:
     resw 1
@@ -18,7 +17,7 @@ protectedmode:
 
     mov WORD  [gdtr],   gdt_size
     mov DWORD [gdtr+2], gdtp
-    lgdt [gdtp]
+    lgdt [gdtr]
 
     mov eax, cr0
     or al, 1
