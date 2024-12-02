@@ -137,6 +137,7 @@ int vprintf(const char *format, va_list vargs)
     {
         const char c  = *(format);
         const char c1 = *(format+1);
+        // TODO: rewrite this to support length modifiers
         if(c == '%')
         {
             switch(c1)

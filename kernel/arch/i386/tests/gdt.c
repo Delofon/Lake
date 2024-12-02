@@ -1,22 +1,19 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "gdt.h"
-
 void encode_descriptor(uint8_t *descriptor, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags);
 
 void setup_gdt(uint8_t *gdtp)
 {
     encode_descriptor(gdtp,    0, 0, 0, 0);
-    encode_descriptor(gdtp+8,  0, 0xfffff, 0x9a, 0x0c); // kernel code
-    encode_descriptor(gdtp+16, 0, 0xfffff, 0x92, 0x0c); // kernel data
-    encode_descriptor(gdtp+24, 0, 0xfffff, 0xfa, 0x0c); // user   code
-    encode_descriptor(gdtp+32, 0, 0xfffff, 0xf2, 0x0c); // user   data
+    encode_descriptor(gdtp+8,  0, 0xaffff, 0x9a, 0x0c);
+    encode_descriptor(gdtp+16, 0, 0xbffff, 0x92, 0x0c);
+    encode_descriptor(gdtp+24, 0, 0xdffff, 0xfa, 0x0c);
+    encode_descriptor(gdtp+32, 0, 0xeffff, 0xf2, 0x0c);
 }
 
 void encode_descriptor(uint8_t *descriptor, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
 {
-    // TODO: Proper error handling (kernel panic)
     if(limit > 0xfffff)
     {
         printf("Limit %d is greater than 0xfffff!\n", limit);
@@ -37,5 +34,18 @@ void encode_descriptor(uint8_t *descriptor, uint32_t base, uint32_t limit, uint8
     descriptor[5] = (access);
     descriptor[6] = ((limit >> 16) & 0xf) | ((flags & 0xf) << 4);
     descriptor[7] = (base >> 24) & 0xff;
+}
+
+int main()
+{
+    uint64_t gdt[5];
+    setup_gdt((uint8_t *)gdt);
+
+    for(int64_t i = 0; i < 5; i++)
+    {
+        printf("gdt+%02ld: 0x%016lx\n", i*8, gdt[i]);
+    }
+
+    return 0;
 }
 

@@ -4,6 +4,8 @@ MBFLAGS  equ MBALIGN | MEMINFO
 MAGIC    equ 0x1badb002
 CHECKSUM equ -(MAGIC + MBFLAGS)
 
+PROTECTION_ENABLE equ 1
+
 section .multiboot
 align 4
     dd MAGIC
@@ -17,28 +19,29 @@ stack_space:
 
 section .data
 global gdtp
-    dd 0x8badf00d
 gdtp:
     dq 0
     dq 0
     dq 0
     dq 0
     dq 0
-gdtp_end:
-gdt_size equ gdtp_end - gdtp
+gdt_end:
+gdt_size equ gdt_end - gdtp
 
 gdtr:
     dw 0
     dd 0
 
 section .text
+extern printf
 global _start:function (_start.end - _start)
-
 _start:
     mov esp, stack_space
 
+    call enable_a20
+
     extern vga_init
-    call vga_init
+    call   vga_init
 
     push gdtp
     extern setup_gdt
@@ -47,11 +50,23 @@ _start:
 
     call setgdt
 
+    ; protected mode begins here
     mov eax, cr0
-    or al, 1
+    or  eax, PROTECTION_ENABLE
     mov cr0, eax
 
-    jmp pmode
+    jmp 8:.farjump
+.farjump:
+    mov ax, 16
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+
+    push gdtp
+    extern kmain
+    call kmain
 
     jmp halt
 .end:
@@ -63,29 +78,20 @@ halt:
     hlt
     jmp .hang
 
+enable_a20:
+    in al, 0x92
+    or al, 2
+    out 0x92, al
+
+    ret
+
 setgdt:
-    mov WORD  [gdtr],   gdt_size
-    mov DWORD [gdtr+2], eax
+    mov  WORD [gdtr],   gdt_size
+    mov DWORD [gdtr+2], gdtp
+
     cli
     lgdt [gdtr]
 
     ret
 
-pmode:
-    mov ax, 8
-    mov cs, ax
-    mov ax, 16
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-
-    jmp 0x08:halt
-
-    extern kmain
-    call kmain
-
-    ret
-.end:
 
