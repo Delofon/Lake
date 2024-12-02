@@ -24,6 +24,35 @@ int printf(const char *format, ...)
     return ret;
 }
 
+static inline int vprintf_u(unsigned int d)
+{
+    int bytes = 0;
+    char s[11] = {0};
+    s[0] = '0';
+
+    char *p = s;
+    if(d == 0) bytes++;
+
+    while(d != 0)
+    {
+        *(p++) = (d % 10) + '0';
+        d /= 10;
+    }
+
+    size_t sz = p - s;
+    bytes += sz;
+    for(size_t i = 0; i < sz / 2; i++)
+    {
+        char tmp = s[i];
+        s[i] = s[sz - i - 1];
+        s[sz - i - 1] = tmp;
+    }
+
+    vga_puts(s);
+
+    return bytes;
+}
+
 static inline int vprintf_d(int d)
 {
     int bytes = 0;
@@ -106,7 +135,7 @@ int vprintf(const char *format, va_list vargs)
     int bytes = 0;
     while(*format)
     {
-        const char c = *format;
+        const char c  = *(format);
         const char c1 = *(format+1);
         if(c == '%')
         {
@@ -114,6 +143,10 @@ int vprintf(const char *format, va_list vargs)
             {
                 case 'd':
                     bytes += vprintf_d(va_arg(vargs, int));
+                    format++;
+                    break;
+                case 'u':
+                    bytes += vprintf_u(va_arg(vargs, unsigned int));
                     format++;
                     break;
                 case 'x':
@@ -135,7 +168,7 @@ int vprintf(const char *format, va_list vargs)
         }
         else
         {
-            vga_putchar(c);
+            putchar(c);
             bytes++;
         }
         format++;
