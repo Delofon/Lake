@@ -18,9 +18,7 @@
 void protectedmode();
 void halt();
 
-extern uint8_t *gdtp;
-
-void pre_kmain()
+void pre_kmain(uint8_t *gdtp)
 {
     vga_init();
     setup_gdt(gdtp);
@@ -29,7 +27,7 @@ void pre_kmain()
     //halt();
 }
 
-void kmain()
+void kmain(uint8_t *gdtp)
 {
     //vga_init();
 
@@ -38,7 +36,7 @@ void kmain()
     uint32_t *gdtw = (uint32_t *)gdtp;
 
     printf("0x%x\n", (uint32_t)gdtp);
-    printf("pregdtp:   0x%x\n",   gdtw[-1]);
+    printf("pregdtp:   0x%x\n",    gdtw[-1]);
     printf("   gdtp:   0x%x|%x\n", gdtw[1], gdtw[0]);
     printf("   gdtp+1: 0x%x|%x\n", gdtw[3], gdtw[2]);
     printf("   gdtp+2: 0x%x|%x\n", gdtw[5], gdtw[4]);

@@ -21,6 +21,9 @@ global _start:function (_start.end - _start)
 _start:
     mov esp, stack_space
 
+    extern gdtp
+
+    push gdtp
     extern pre_kmain
     call pre_kmain
 
