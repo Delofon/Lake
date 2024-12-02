@@ -9,10 +9,10 @@ void setup_gdt(uint8_t *gdtp)
 {
     printf("0x%x\n", (uint32_t)gdtp);
     encode_descriptor(gdtp,    0, 0, 0, 0);
-    encode_descriptor(gdtp+8,  0, 0xfffff, 0x9a, 0x0c);
-    encode_descriptor(gdtp+16, 0, 0xfffff, 0x92, 0x0c);
-    encode_descriptor(gdtp+24, 0, 0xfffff, 0xfa, 0x0c);
-    encode_descriptor(gdtp+32, 0, 0xfffff, 0xf2, 0x0c);
+    encode_descriptor(gdtp+8,  0, 0xfffff, 0x9a, 0x0c); // kernel code
+    encode_descriptor(gdtp+16, 0, 0xfffff, 0x92, 0x0c); // kernel data
+    encode_descriptor(gdtp+24, 0, 0xfffff, 0xfa, 0x0c); // user   code
+    encode_descriptor(gdtp+32, 0, 0xfffff, 0xf2, 0x0c); // user   data
 }
 
 void encode_descriptor(uint8_t *descriptor, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)

@@ -18,15 +18,6 @@
 void protectedmode();
 void halt();
 
-void pre_kmain(uint8_t *gdtp)
-{
-    vga_init();
-    setup_gdt(gdtp);
-    //protectedmode();
-
-    //halt();
-}
-
 void kmain(uint8_t *gdtp)
 {
     //vga_init();

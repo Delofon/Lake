@@ -41,7 +41,7 @@ grub-iso: build/kernel
 
 .PHONY: qemu
 qemu: default
-> qemu-system-i386 -kernel build/kernel
+> qemu-system-i386 -kernel build/kernel -d int --no-reboot
 
 .PHONY: mkdir
 mkdir:
