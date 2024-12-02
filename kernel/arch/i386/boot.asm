@@ -38,10 +38,10 @@ global _start:function (_start.end - _start)
 _start:
     mov esp, stack_space
 
-    call enable_a20
-
     extern vga_init
-    call   vga_init
+    call vga_init
+
+    call enable_a20
 
     push gdtp
     extern setup_gdt
@@ -49,20 +49,7 @@ _start:
     add esp, 4
 
     call setgdt
-
-    ; protected mode begins here
-    mov eax, cr0
-    or  eax, PROTECTION_ENABLE
-    mov cr0, eax
-
-    jmp 8:.farjump
-.farjump:
-    mov ax, 16
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
+    call pmode
 
     push gdtp
     extern kmain
@@ -94,4 +81,20 @@ setgdt:
 
     ret
 
+pmode:
+    mov eax, cr0
+    or  eax, PROTECTION_ENABLE
+    mov cr0, eax
+
+    jmp 8:.farjump
+
+.farjump:
+    mov ax, 16
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+
+    ret
 
