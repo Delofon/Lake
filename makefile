@@ -52,13 +52,13 @@ $(BUILD)/%.o: %.asm
 > $(AS) $(ASFLAGS) -o $@ $<
 
 .PHONY: grub-iso
-grub-iso: build/kernel
-> mkdir -p build/iso/boot/grub
+grub-iso: $(BUILD)/lake
+> mkdir -p $(BUILD)/iso/boot/grub
 >
-> cp build/kernel build/iso/boot/kernel
-> cp grub.cfg     build/iso/boot/grub/grub.cfg
+> cp $(BUILD)/lake $(BUILD)/iso/boot/lake
+> cp grub.cfg      $(BUILD)/iso/boot/grub/grub.cfg
 >
-> grub-mkrescue -o build/lake.iso build/iso
+> grub-mkrescue -o $(BUILD)/lake.iso $(BUILD)/iso
 
 .PHONY: qemu
 qemu: default

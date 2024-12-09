@@ -1,7 +1,7 @@
 section .bss
 global idtp
 idtp:
-    resq 80
+    resq 0x80
 idt_end:
 idt_size equ idt_end - idtp
 
