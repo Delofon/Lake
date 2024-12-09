@@ -29,8 +29,8 @@ gdt_end:
 gdt_size equ gdt_end - gdtp
 
 gdtr:
-    dw 0
-    dd 0
+    dw gdt_size - 1
+    dd gdtp
 
 section .text
 extern printf
@@ -48,8 +48,11 @@ _start:
     call setup_gdt
     add esp, 4
 
+    mov eax, cr0
+    or  eax, PROTECTION_ENABLE
+    mov cr0, eax
+
     call setgdt
-    call pmode
 
     push gdtp
     extern kmain
@@ -73,18 +76,8 @@ enable_a20:
     ret
 
 setgdt:
-    mov  WORD [gdtr],   gdt_size
-    mov DWORD [gdtr+2], gdtp
-
     cli
     lgdt [gdtr]
-
-    ret
-
-pmode:
-    mov eax, cr0
-    or  eax, PROTECTION_ENABLE
-    mov cr0, eax
 
     jmp 8:.farjump
 
