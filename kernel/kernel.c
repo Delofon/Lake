@@ -11,14 +11,14 @@
 #include <string.h>
 #include <limits.h>
 
-#include <arch/i386/vga.h>
+#include <panic.h>
 
 void halt();
 
 void kmain(uint8_t *gdtp)
 {
-    vga_init();
-
     printf("Lake v2\n\n");
+
+    panic("Panic test");
 }
 
