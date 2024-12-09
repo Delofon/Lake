@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "gdt.h"
-
-void encode_descriptor(uint8_t *descriptor, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags);
+#define ENC_DESC void encode_descriptor(uint8_t *descriptor, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
+ENC_DESC;
 
 void setup_gdt(uint8_t *gdtp)
 {
@@ -14,7 +13,7 @@ void setup_gdt(uint8_t *gdtp)
     encode_descriptor(gdtp+32, 0, 0xfffff, 0xf2, 0x0c); // user   data
 }
 
-void encode_descriptor(uint8_t *descriptor, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
+ENC_DESC
 {
     // TODO: Proper error handling (kernel panic)
     if(limit > 0xfffff)

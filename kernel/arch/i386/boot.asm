@@ -17,21 +17,6 @@ align 16
 resb 16384
 stack_space:
 
-section .data
-global gdtp
-gdtp:
-    dq 0
-    dq 0
-    dq 0
-    dq 0
-    dq 0
-gdt_end:
-gdt_size equ gdt_end - gdtp
-
-gdtr:
-    dw gdt_size - 1
-    dd gdtp
-
 section .text
 extern printf
 global _start:function (_start.end - _start)
@@ -43,6 +28,7 @@ _start:
 
     call enable_a20
 
+    extern gdtp
     push gdtp
     extern setup_gdt
     call setup_gdt
@@ -52,6 +38,7 @@ _start:
     or  eax, PROTECTION_ENABLE
     mov cr0, eax
 
+    extern setgdt
     call setgdt
 
     push gdtp
@@ -72,22 +59,6 @@ enable_a20:
     in al, 0x92
     or al, 2
     out 0x92, al
-
-    ret
-
-setgdt:
-    cli
-    lgdt [gdtr]
-
-    jmp 8:.farjump
-
-.farjump:
-    mov ax, 16
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
 
     ret
 
