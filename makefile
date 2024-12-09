@@ -4,13 +4,27 @@ CC := i686-elf-gcc
 AR := i686-elf-ar
 AS := nasm
 
-BUILD := $(CURDIR)/build
-KERNEL := $(CURDIR)/kernel
-LIBC := $(CURDIR)/libc
+BUILD := build
+KERNEL := kernel
+LIBC := libc
 
 ASFLAGS := -felf32
 CFLAGS := -I$(LIBC)/ -I$(KERNEL)/ -O2 -std=gnu99 -ffreestanding
-LIBS := -L$(BUILD)/ -lgcc -lk -nostdlib -T linker.ld
+LIBS := -L$(BUILD)/ -lgcc -lk -nostdlib -T kernel/arch/i386/linker.ld
+
+LAKE_CSOURCES := $(wildcard $(KERNEL)/arch/i386/*.c) \
+				 $(wildcard $(KERNEL)/*.c)
+LAKE_COBJECTS := $(patsubst %.c, $(BUILD)/%.o, $(LAKE_CSOURCES))
+
+LAKE_ASMSOURCES := $(wildcard $(KERNEL)/arch/i386/*.asm)
+LAKE_ASMOBJECTS := $(patsubst %.asm, $(BUILD)/%.o, $(LAKE_ASMSOURCES))
+
+LAKE_OBJECTS := $(LAKE_COBJECTS) $(LAKE_ASMOBJECTS)
+
+LIBC_CSOURCES := $(wildcard $(LIBC)/*.c)
+LIBC_COBJECTS := $(patsubst %.c, $(BUILD)/%.o, $(LIBC_CSOURCES))
+
+LIBC_OBJECTS := $(LIBC_COBJECTS)
 
 CWARNINGS := -Wall -Wextra -Werror=vla -Werror=shadow -Wswitch-enum -pedantic
 CNOWARNINGS := -Wno-strict-prototypes
@@ -18,20 +32,27 @@ CNOWARNINGS := -Wno-strict-prototypes
 export
 
 .PHONY: default
-default: mkdir build/kernel
+default: mkdir $(BUILD)/lake
 
-.PHONY: build/kernel
-build/kernel: build/libk.a
-> $(MAKE) -C kernel/arch/i386
+$(BUILD)/lake: $(LAKE_OBJECTS) $(BUILD)/libk.a
+> @mkdir -p $(shell dirname $@)
+> $(CC) $(CFLAGS) -o $@ $(LAKE_OBJECTS) $(LIBS)
+> grub-file --is-x86-multiboot $(BUILD)/lake
 
-.PHONY: build/libk.a
-build/libk.a:
-> $(MAKE) -C libc
+$(BUILD)/libk.a: $(LIBC_OBJECTS)
+> @mkdir -p $(shell dirname $@)
+> $(AR) rcs $@ $(LIBC_OBJECTS)
+
+$(BUILD)/%.o: %.c $(DEPS)
+> @mkdir -p $(shell dirname $@)
+> $(CC) $(CFLAGS) $(CWARNINGS) $(CNOWARNINGS) -c -o $@ $<
+
+$(BUILD)/%.o: %.asm
+> @mkdir -p $(shell dirname $@)
+> $(AS) $(ASFLAGS) -o $@ $<
 
 .PHONY: grub-iso
 grub-iso: build/kernel
-> mkdir -p build/iso
-> mkdir -p build/iso/boot
 > mkdir -p build/iso/boot/grub
 >
 > cp build/kernel build/iso/boot/kernel
@@ -41,11 +62,11 @@ grub-iso: build/kernel
 
 .PHONY: qemu
 qemu: default
-> qemu-system-i386 -kernel build/kernel
+> qemu-system-i386 -kernel $(BUILD)/lake
 
 .PHONY: qemu-dint
 qemu-dint: default
-> qemu-system-i386 -kernel build/kernel -d int --no-reboot
+> qemu-system-i386 -kernel $(BUILD)/lake -d int --no-reboot
 
 .PHONY: mkdir
 mkdir:
