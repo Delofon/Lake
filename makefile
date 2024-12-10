@@ -35,20 +35,20 @@ export
 default: mkdir $(BUILD)/lake
 
 $(BUILD)/lake: $(LAKE_OBJECTS) $(BUILD)/libk.a
-> @mkdir -p $(shell dirname $@)
+> @mkdir -p $(dir $@)
 > $(CC) $(CFLAGS) -o $@ $(LAKE_OBJECTS) $(LIBS)
 > grub-file --is-x86-multiboot $(BUILD)/lake
 
 $(BUILD)/libk.a: $(LIBC_OBJECTS)
-> @mkdir -p $(shell dirname $@)
+> @mkdir -p $(dir $@)
 > $(AR) rcs $@ $(LIBC_OBJECTS)
 
 $(BUILD)/%.o: %.c $(DEPS)
-> @mkdir -p $(shell dirname $@)
+> @mkdir -p $(dir $@)
 > $(CC) $(CFLAGS) $(CWARNINGS) $(CNOWARNINGS) -c -o $@ $<
 
 $(BUILD)/%.o: %.asm
-> @mkdir -p $(shell dirname $@)
+> @mkdir -p $(dir $@)
 > $(AS) $(ASFLAGS) -o $@ $<
 
 .PHONY: grub-iso
