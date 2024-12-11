@@ -14,20 +14,20 @@ LIBS := -L$(BUILD)/ -lgcc -lk -nostdlib -T kernel/arch/i386/linker.ld
 
 LAKE_CSOURCES := $(wildcard $(KERNEL)/arch/i386/*.c) \
 				 $(wildcard $(KERNEL)/*.c)
-LAKE_COBJECTS := $(patsubst %.c, $(BUILD)/%.o, $(LAKE_CSOURCES))
+LAKE_COBJECTS := $(patsubst %, $(BUILD)/%.o, $(LAKE_CSOURCES))
 
 LAKE_ASMSOURCES := $(wildcard $(KERNEL)/arch/i386/*.asm)
-LAKE_ASMOBJECTS := $(patsubst %.asm, $(BUILD)/%.o, $(LAKE_ASMSOURCES))
+LAKE_ASMOBJECTS := $(patsubst %, $(BUILD)/%.o, $(LAKE_ASMSOURCES))
 
 LAKE_OBJECTS := $(LAKE_COBJECTS) $(LAKE_ASMOBJECTS)
 
 LIBC_CSOURCES := $(wildcard $(LIBC)/*.c)
-LIBC_COBJECTS := $(patsubst %.c, $(BUILD)/%.o, $(LIBC_CSOURCES))
+LIBC_COBJECTS := $(patsubst %, $(BUILD)/%.o, $(LIBC_CSOURCES))
 
 LIBC_OBJECTS := $(LIBC_COBJECTS)
 
-CWARNINGS := -Wall -Wextra -Werror=vla -Werror=shadow -Wswitch-enum -pedantic
-CNOWARNINGS := -Wno-strict-prototypes
+CWARNINGS := -Wall -Wextra -Werror=vla -Werror=shadow -Wswitch-enum -Wpedantic \
+             -Wno-strict-prototypes
 
 export
 
@@ -43,11 +43,11 @@ $(BUILD)/libk.a: $(LIBC_OBJECTS)
 > @mkdir -p $(dir $@)
 > $(AR) rcs $@ $(LIBC_OBJECTS)
 
-$(BUILD)/%.o: %.c $(DEPS)
+$(BUILD)/%.c.o: %.c $(DEPS)
 > @mkdir -p $(dir $@)
-> $(CC) $(CFLAGS) $(CWARNINGS) $(CNOWARNINGS) -c -o $@ $<
+> $(CC) $(CFLAGS) $(CWARNINGS) -c -o $@ $<
 
-$(BUILD)/%.o: %.asm
+$(BUILD)/%.asm.o: %.asm
 > @mkdir -p $(dir $@)
 > $(AS) $(ASFLAGS) -o $@ $<
 
