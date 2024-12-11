@@ -1,11 +1,12 @@
-section .bss
+section .data
 global idtp
 idtp:
-    resq 0x80
+%rep 0x80
+    dq 0
+%endrep
 idt_end:
 idt_size equ idt_end - idtp
 
-section .data
 idtr:
     dw idt_size - 1
     dd idtp
