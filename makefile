@@ -26,15 +26,18 @@ LIBC_COBJECTS := $(patsubst %, $(BUILD)/%.o, $(LIBC_CSOURCES))
 
 LIBC_OBJECTS := $(LIBC_COBJECTS)
 
-CWARNINGS := -Wall -Wextra -Werror=vla -Werror=shadow -Wswitch-enum -Wpedantic \
+DEPS := $(patsubst %, $(BUILD)/%.d, $(LAKE_CSOURCES)) \
+		$(patsubst %, $(BUILD)/%.d, $(LIBC_CSOURCES))
+
+CWARNINGS := -Wall -Wextra -Werror=vla -Werror=shadow -Wswitch-enum \
              -Wno-strict-prototypes
 
-export
+-include $(DEPS)
 
 .PHONY: default
 default: mkdir $(BUILD)/lake
 
-$(BUILD)/lake: $(LAKE_OBJECTS) $(BUILD)/libk.a
+$(BUILD)/lake: $(LAKE_OBJECTS) $(BUILD)/libk.a makefile
 > @mkdir -p $(dir $@)
 > $(CC) $(CFLAGS) -o $@ $(LAKE_OBJECTS) $(LIBS)
 > grub-file --is-x86-multiboot $(BUILD)/lake
@@ -43,11 +46,11 @@ $(BUILD)/libk.a: $(LIBC_OBJECTS)
 > @mkdir -p $(dir $@)
 > $(AR) rcs $@ $(LIBC_OBJECTS)
 
-$(BUILD)/%.c.o: %.c $(DEPS)
+$(BUILD)/%.c.o:%.c makefile
 > @mkdir -p $(dir $@)
-> $(CC) $(CFLAGS) $(CWARNINGS) -c -o $@ $<
+> $(CC) $(CFLAGS) $(CWARNINGS) -MMD -MP -c -o $@ $<
 
-$(BUILD)/%.asm.o: %.asm
+$(BUILD)/%.asm.o: %.asm makefile
 > @mkdir -p $(dir $@)
 > $(AS) $(ASFLAGS) -o $@ $<
 
