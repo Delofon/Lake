@@ -9,7 +9,7 @@
 
 void halt();
 
-void kmain(uint8_t *gdtp, uint32_t *idtp, uint32_t test_interrupt_arg)
+void kmain(uint8_t *gdtp, uint32_t *idtp, uint32_t *test_interrupt_arg)
 {
     printf("Lake v3\n\n");
 
@@ -17,8 +17,8 @@ void kmain(uint8_t *gdtp, uint32_t *idtp, uint32_t test_interrupt_arg)
     printf("idtp: 0x%x\n", idtp);
     printf("0x%x 0x%x\n", idtp+0x80*2, idtp+0x80*2+1);
     printf("idtp+0x80: 0x%x|%x\n", idtp[0x80*2+1], idtp[0x80*2]);
-    printf("[kmain] test_interrupt_arg: 0x%x\n", test_interrupt_arg);
-    printf("[kmain] test_interrupt:     0x%x\n", test_interrupt);
+    //printf("[kmain] test_interrupt_arg: 0x%x\n", *test_interrupt_arg);
+    //printf("[kmain] test_interrupt:     0x%x\n", test_interrupt);
 
     halt();
 }

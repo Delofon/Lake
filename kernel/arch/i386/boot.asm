@@ -63,8 +63,6 @@ _start:
     sti
 
     ; booting finished, give control to the main kernel code
-    extern test_interrupt
-    push test_interrupt
     push idtp
     push gdtp
     extern kmain
