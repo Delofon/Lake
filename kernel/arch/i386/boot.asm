@@ -78,9 +78,12 @@ _start:
 global halt
 halt:
     cli
-.hang:
+    jmp hang
+
+global hang
+hang:
     hlt
-    jmp .hang
+    jmp hang
 
 enable_a20:
     in al, 0x92

@@ -40,6 +40,9 @@ void vga_puts(const char *s);
 void vga_linefeed();
 void vga_scroll();
 
+void vga_cursor_init(size_t start_scanline, size_t end_scanline);
+void vga_cursor_move(size_t vga_x, size_t vga_y);
+
 static inline void vga_setcol(vgacol_e fg, vgacol_e bg)
 {
     vga_color = bg << 4 | fg;

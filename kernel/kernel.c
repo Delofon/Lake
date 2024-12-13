@@ -7,12 +7,14 @@
 
 #include <arch/i386/isr.h>
 
-void halt();
+void hang();
 
 void kmain(uint8_t *gdtp, uint32_t *idtp)
 {
     printf("Lake v3\n\n");
 
-    for(;;);
+    printf("%s", "cursor test\n");
+
+    hang();
 }
 
