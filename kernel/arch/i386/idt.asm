@@ -1,5 +1,7 @@
 section .data
+
 global idtp
+
 idtp:
 %rep 0x80
     dq 0
@@ -12,6 +14,7 @@ idtr:
     dd idtp
 
 section .text
+
 global setidt
 setidt:
     cli

@@ -60,18 +60,19 @@ _start:
     ; set idtr register
     call setidt
 
+    ; initialise PIC chips with required offsets
     call pic_init
 
     ; we're ready for interrupts,
     ; setting gdt and idt required clearing interrupt flag so reset it
-    ;sti
+    sti
 
     ; booting finished, give control to the main kernel code
     push idtp
     push gdtp
     call kmain
 
-    ;int 0x80
+    int 0x80
 
     jmp halt
 .end:

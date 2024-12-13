@@ -71,6 +71,10 @@ qemu: default
 qemu-dint: default
 > qemu-system-i386 -kernel $(BUILD)/lake -d int --no-reboot
 
+.PHONY: qemu-log
+qemu-log: default
+> qemu-system-i386 -kernel $(BUILD)/lake -d int,cpu_reset --no-reboot
+
 .PHONY: mkdir
 mkdir:
 > @mkdir -p build

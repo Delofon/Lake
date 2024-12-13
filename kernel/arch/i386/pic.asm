@@ -19,6 +19,10 @@ pic_init:
 
     mov al, 0x20 ; offset for IRQ 0 - 7
     out MPIC_DATA, al
+
+    mov al, 0
+    out 0x80, al
+
     mov al, 0x28 ; offset for IRQ 8 - 15
     out SPIC_DATA, al
 
@@ -27,6 +31,10 @@ pic_init:
 
     mov al, 4 ; IRQ number for cascade from SPIC
     out MPIC_DATA, al
+
+    mov al, 0
+    out 0x80, al
+
     mov al, 2 ; cascade identity
     out SPIC_DATA, al
 
@@ -35,10 +43,12 @@ pic_init:
 
     mov al, 1 ; 8086 mode
     out MPIC_DATA, al
-    out SPIC_DATA, al
 
     mov al, 0
     out 0x80, al
+
+    mov al, 1
+    out SPIC_DATA, al
 
     ret
 
