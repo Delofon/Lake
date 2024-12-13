@@ -99,7 +99,11 @@ static inline int vprintf_d(int d, padding_e padding, int width)
     s[0] = '0';
 
     char *p = s;
-    if(d == 0) bytes++;
+    if(d == 0)
+    {
+        bytes++;
+        p++;
+    }
 
     if(d < 0)
     {
@@ -141,7 +145,11 @@ static inline int vprintf_u(unsigned int d, padding_e padding, int width)
     s[0] = '0';
 
     char *p = s;
-    if(d == 0) bytes++;
+    if(d == 0)
+    {
+        bytes++;
+        p++;
+    }
 
     while(d != 0)
     {
@@ -169,18 +177,20 @@ static inline int vprintf_u(unsigned int d, padding_e padding, int width)
     return bytes;
 }
 
-static inline int vprintf_x(int d, padding_e padding, int width)
+static inline int vprintf_x(unsigned int ud, padding_e padding, int width)
 {
     const char dig[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-
-    unsigned int ud = (unsigned int) d;
 
     int bytes = 0;
     char s[9] = {0};
     s[0] = '0';
 
     char *p = s;
-    if(ud == 0) bytes++;
+    if(ud == 0)
+    {
+        bytes++;
+        p++;
+    }
 
     while(ud != 0)
     {
@@ -361,7 +371,7 @@ int vprintf(const char *format, va_list vargs)
                         format++;
                         break;
                     case 'x':
-                        bytes += vprintf_x(va_arg(vargs, int), padding, width);
+                        bytes += vprintf_x(va_arg(vargs, unsigned int), padding, width);
                         format++;
                         break;
                     case 's':
