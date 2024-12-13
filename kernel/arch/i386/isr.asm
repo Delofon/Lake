@@ -53,7 +53,11 @@ GeneralProtectionFault:
 global PIT
 PIT:
     pusha
+
+    push BYTE 0
     call pic_eoi
+    add esp, 1
+
     popa
     iret
 
@@ -61,7 +65,9 @@ global Keyboard
 Keyboard:
     pusha
 
+    push BYTE 1
     call Keyboard_C
+    add esp, 1
 
     call pic_eoi
     popa
@@ -70,7 +76,11 @@ Keyboard:
 global CMOS
 CMOS:
     pusha
+
+    push BYTE 8
     call pic_eoi
+    add esp, 1
+
     popa
     iret
 
