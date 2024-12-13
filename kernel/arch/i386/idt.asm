@@ -3,7 +3,7 @@ section .data
 global idtp
 
 idtp:
-%rep 0x80
+%rep 0x81
     dq 0
 %endrep
 idt_end:
