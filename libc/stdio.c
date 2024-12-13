@@ -381,6 +381,8 @@ int vprintf(const char *format, va_list vargs)
                     case 'p':
                         putchar('0'); putchar('x'); bytes += 2;
                         bytes += vprintf_x(va_arg(vargs, unsigned int), PADDING_ZERO, 8);
+                        format++;
+                        break;
                     case '%':
                         putchar('%');
                         bytes++;
