@@ -6,25 +6,32 @@ section .text
 
 global vga_cursor_init
 vga_cursor_init:
-    mov edx, [esp]   ; start_scanline
+    push ebx
+
+    mov edi, [esp]   ; start_scanline
     mov ecx, [esp+4] ; end_scanline
 
     mov al, 0x0a
-    out 0x3d4, al
+    mov dx, 0x3d4
+    out dx, al
 
-    in al, 0x3d5
+    mov dx, 0x3d5
+    in al, dx
     and al, 0xc0
-    or al, dl
-    out 0x3d5, al
+    or al, bl
+    out dx, al
 
-    in al, 0x0b
-    out 0x3d4, al
+    mov dx, 0x3d4
+    mov al, 0x0b
+    out dx, al
 
-    in al, 0x3d5
+    mov dx, 0x3d5
+    in al, dx
     and al, 0xe0
     or al, cl
-    out 0x3d5, al
+    out dx, al
 
+    pop ebx
     ret
 
 global vga_cursor_move
@@ -35,17 +42,21 @@ vga_cursor_move:
     imul ecx, VGA_WIDTH
     add ecx, eax
 
+    mov dx, 0x3d4
     mov al, 0x0f
-    out 0x3d4, al
+    out dx, al
 
+    mov dx, 0x3d5
     mov al, cl
-    out 0x3d5, al
+    out dx, al
 
+    mov dx, 0x3d4
     mov al, 0x0e
-    out 0x3d4, al
+    out dx, al
 
+    mov dx, 0x3d5
     mov al, ch
-    out 0x3d5, al
+    out dx, al
 
     ret
 

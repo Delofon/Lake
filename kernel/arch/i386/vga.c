@@ -20,7 +20,7 @@ uint8_t vga_init()
     for(int i = 0; i < VGA_SIZE; i++)
         vga_buf[i] = vga_color << 8 | ' ';
 
-    vga_cursor_init(0, VGA_HEIGHT);
+    vga_cursor_init(0, 15);
 
     return 0;
 }

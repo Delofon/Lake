@@ -13,6 +13,7 @@ CFLAGS := -I$(LIBC)/ -I$(KERNEL)/ -O2 -std=gnu99 -ffreestanding
 LIBS := -L$(BUILD)/ -lgcc -lk -nostdlib -T kernel/arch/i386/linker.ld
 
 LAKE_CSOURCES := $(wildcard $(KERNEL)/arch/i386/*.c) \
+				 $(wildcard $(KERNEL)/drv/*.c) \
 				 $(wildcard $(KERNEL)/*.c)
 LAKE_COBJECTS := $(patsubst %, $(BUILD)/%.o, $(LAKE_CSOURCES))
 
@@ -32,10 +33,10 @@ DEPS := $(patsubst %, $(BUILD)/%.d, $(LAKE_CSOURCES)) \
 CWARNINGS := -Wall -Wextra -Werror=vla -Werror=shadow -Wswitch-enum \
              -Wno-strict-prototypes
 
--include $(DEPS)
-
 .PHONY: default
 default: mkdir $(BUILD)/lake
+
+-include $(DEPS)
 
 $(BUILD)/lake: $(LAKE_OBJECTS) $(BUILD)/libk.a makefile
 > @mkdir -p $(dir $@)
