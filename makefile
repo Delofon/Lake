@@ -73,7 +73,7 @@ qemu-dint: default
 
 .PHONY: mkdir
 mkdir:
-> mkdir -p build
+> @mkdir -p build
 
 .PHONY: clean
 clean:
