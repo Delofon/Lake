@@ -72,8 +72,6 @@ _start:
     push gdtp
     call kmain
 
-    int 0x80
-
     jmp halt
 .end:
 

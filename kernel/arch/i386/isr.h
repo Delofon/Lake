@@ -39,7 +39,6 @@ extern void PrimaryATA();
 extern void SecondaryATA();
 
 // Software interrupts
-extern void test_interrupt();
 
 #endif
 

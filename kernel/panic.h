@@ -3,7 +3,7 @@
 
 // TODO: Move to some CPU architecture agnostic header file?
 void printreg();
-void panic(char *msg);
+void panic(const char *msg);
 
 #endif
 
