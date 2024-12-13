@@ -12,8 +12,8 @@ void printreg()
     register int ebp asm("ebp");
     register int esp asm("esp");
 
-    printf("eax = 0x%x ebx = 0x%x ecx = 0x%x edx = 0x%x\n", eax, ebx, ecx, edx);
-    printf("edi = 0x%x esi = 0x%x\n", edi, esi);
-    printf("ebp = 0x%x esp = 0x%x\n", ebp, esp);
+    printf("eax = 0x%08x ebx = 0x%08x ecx = 0x%08x edx = 0x%08x\n", eax, ebx, ecx, edx);
+    printf("edi = 0x%08x esi = 0x%08x\n", edi, esi);
+    printf("ebp = 0x%08x esp = 0x%08x\n", ebp, esp);
 }
 
