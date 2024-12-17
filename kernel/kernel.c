@@ -15,7 +15,6 @@ void kmain(uint8_t *gdtp, uint32_t *idtp)
     printf("Lake v3\n\n");
 
     printf("%s", "cursor test\n");
-    vga_cursor_move(3, 0);
 
     hang();
 }

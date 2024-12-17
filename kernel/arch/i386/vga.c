@@ -20,7 +20,7 @@ uint8_t vga_init()
     for(int i = 0; i < VGA_SIZE; i++)
         vga_buf[i] = vga_color << 8 | ' ';
 
-    vga_cursor_init(0, 15);
+    vga_cursor_init(14, 15);
 
     return 0;
 }
@@ -47,7 +47,7 @@ void vga_puts(const char *s)
     while(*s)
         vga_putchar(*(s++));
 
-    vga_cursor_move(vga_x, vga_y);
+    //vga_cursor_move(vga_x, vga_y);
 }
 
 void vga_linefeed()
