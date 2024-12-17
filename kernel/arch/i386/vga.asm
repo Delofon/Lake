@@ -1,6 +1,12 @@
 VGA_WIDTH equ 80
 
+section .data
+breakmsg:
+    db "break",0
+
 section .text
+
+extern panic
 
 ; non-working sheet
 
@@ -8,8 +14,8 @@ global vga_cursor_init
 vga_cursor_init:
     push ebx
 
-    mov edi, [esp]   ; start_scanline
-    mov ecx, [esp+4] ; end_scanline
+    mov ebx, [esp+8]   ; start_scanline
+    mov ecx, [esp+12] ; end_scanline
 
     mov al, 0x0a
     mov dx, 0x3d4
@@ -36,11 +42,17 @@ vga_cursor_init:
 
 global vga_cursor_move
 vga_cursor_move:
-    mov eax, [esp]   ; vga_x
-    mov ecx, [esp+4] ; vga_y
+    mov eax, [esp+4]   ; vga_x
+    mov ecx, [esp+8] ; vga_y
 
-    imul ecx, VGA_WIDTH
-    add ecx, eax
+    mov dx, VGA_WIDTH
+    imul cx, dx
+    add cx, ax
+    inc cx
+
+    push DWORD breakmsg
+    call panic
+    add esp, 4
 
     mov dx, 0x3d4
     mov al, 0x0f

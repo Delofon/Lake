@@ -1,16 +1,20 @@
 #include <stdio.h>
+#include <stdint.h>
+#include <stddef.h>
+
+extern uint32_t regs[8];
 
 void printreg()
 {
-    register int eax asm("eax");
-    register int ebx asm("ebx");
-    register int ecx asm("ecx");
-    register int edx asm("edx");
-    register int edi asm("edi");
-    register int esi asm("esi");
+    uint32_t eax = regs[0];
+    uint32_t ebx = regs[1];
+    uint32_t ecx = regs[2];
+    uint32_t edx = regs[3];
+    uint32_t edi = regs[4];
+    uint32_t esi = regs[5];
 
-    register int ebp asm("ebp");
-    register int esp asm("esp");
+    uint32_t ebp = regs[6];
+    uint32_t esp = regs[7];
 
     printf("eax = 0x%08x ebx = 0x%08x ecx = 0x%08x edx = 0x%08x\n", eax, ebx, ecx, edx);
     printf("edi = 0x%08x esi = 0x%08x\n", edi, esi);
