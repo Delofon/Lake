@@ -3,18 +3,17 @@
 
 void encode_gdt(uint8_t *descriptor, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
 {
-    // TODO: Proper error handling (kernel panic)
     if(limit > 0xfffff)
     {
         printf("Limit %d is greater than 0xfffff!\n", limit);
         printf("%x %x %x %x %x\n", descriptor, base, limit, access, flags);
-        return;
+        panic("bad gdt descriptor");
     }
     if(flags > 0xf)
     {
         printf("Flags %d are greater than 0xf!\n", flags);
         printf("%x %x %x %x %x\n", descriptor, base, limit, access, flags);
-        return;
+        panic("bad gdt descriptor");
     }
 
     descriptor[0] = (limit)      & 0xff;
