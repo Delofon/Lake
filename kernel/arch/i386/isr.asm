@@ -32,9 +32,9 @@ global DoubleFault
 DoubleFault:
     pusha
 
-    push WORD 0x8
+    push 0x8
     call panic_stub
-    add esp, 2
+    add esp, 4
 
     popa
     iret
@@ -43,9 +43,9 @@ global GeneralProtectionFault
 GeneralProtectionFault:
     pusha
 
-    push WORD 0xd
+    push 0xd
     call panic_stub
-    add esp, 2
+    add esp, 4
 
     popa
     iret
@@ -54,9 +54,9 @@ global PIT
 PIT:
     pusha
 
-    push WORD 0
+    push 0
     call pic_eoi
-    add esp, 2
+    add esp, 4
 
     popa
     iret
@@ -67,9 +67,9 @@ Keyboard:
 
     call Keyboard_C
 
-    push WORD 1
+    push 1
     call pic_eoi
-    add esp, 2
+    add esp, 4
 
     popa
     iret
@@ -78,9 +78,9 @@ global CMOS
 CMOS:
     pusha
 
-    push WORD 8
+    push 8
     call pic_eoi
-    add esp, 2
+    add esp, 4
 
     popa
     iret
