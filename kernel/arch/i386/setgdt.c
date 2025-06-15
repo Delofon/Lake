@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include <panic.h>
+
 void encode_gdt(uint8_t *descriptor, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
 {
     if(limit > 0xfffff)

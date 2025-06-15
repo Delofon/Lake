@@ -75,20 +75,25 @@ _start:
     jmp halt
 .end:
 
+; halt - turn off operations
+; hang - stop eating cpu cycles until interrupt
 global halt
 halt:
     cli
-    jmp hang
+.hlt:
+    hlt
+    jmp .hlt
 
 global hang
 hang:
     hlt
-    jmp hang
+    ret
 
 enable_a20:
-    in al, 0x92
+    mov dx, 0x92
+    in al, dx
     or al, 2
-    out 0x92, al
+    out dx, al
 
     ret
 

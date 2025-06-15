@@ -2,6 +2,7 @@
 #include <stdint.h>
 
 #include <panic.h>
+#include <drv/keyboard.h>
 
 #include "input.h"
 
@@ -18,15 +19,21 @@ typedef union
 
 ttystate_t ttystate = { .state = 0u };
 
-const char lkeytoascii[NUM_KEYS] = "\000123456789qwertyuiopasdfghjklzxcvbnm-=\0 \0\n";
-const char ukeytoascii[NUM_KEYS] = "\000!@#$%^&*(QWERTYUIOPASDFGHJKLZXCVBNM_+\0 \0\n";
+const char lkeytoascii[NUM_KEYS] = "\0001234567890qwertyuiopasdfghjklzxcvbnm-=\0 \0\n";
+const char ukeytoascii[NUM_KEYS] = "\000!@#$%^&*()QWERTYUIOPASDFGHJKLZXCVBNM_+\0 \0\n";
 
-void processevent(key_t key)
+void processevent(event_t event)
 {
+    key_t key = event.key;
     if(key == KEY_LSHIFT)
-        ttystate.shift = 1;
+    {
+        ttystate.shift = event.press;
+    }
     else
     {
+        if(event.press == RELEASE)
+            return;
+
         if(key >= NUM_KEYS)
         {
             printf("tty.c_processevent: %u passed as key num\n", key);
@@ -34,10 +41,20 @@ void processevent(key_t key)
         }
 
         if(ttystate.shift)
-            ukeytoascii[key];
+            putchar(ukeytoascii[key]);
         else
-            lkeytoascii[key];
+            putchar(lkeytoascii[key]);
 
+    }
+}
+
+void processtty()
+{
+    event_t ev = kbevent_pop();
+    while(ev.key != KEY_RESERVED)
+    {
+        processevent(ev);
+        ev = kbevent_pop();
     }
 }
 

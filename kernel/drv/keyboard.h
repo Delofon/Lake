@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#include <input.h>
+
 typedef enum
 {
     SCAN1 = 0,
@@ -19,11 +21,20 @@ typedef union
 
         scanset_t scan : 2;
 
-        uint8_t numlock   : 1;
-        uint8_t capslock  : 1;
-        uint8_t scrollock : 1;
+        uint8_t num    : 1;
+        uint8_t caps   : 1;
+        uint8_t scroll : 1;
     };
 } kbstate_t;
+
+typedef struct
+{
+    uint8_t command;
+    uint8_t data;
+} command_t;
+
+void processkbscan();
+event_t kbevent_pop();
 
 #endif
 

@@ -1,6 +1,8 @@
 #ifndef INPUT_H_
 #define INPUT_H_
 
+#include <stdint.h>
+
 typedef enum
 {
     KEY_RESERVED = 0,
@@ -53,6 +55,18 @@ typedef enum
 
     NUM_KEYS
 } key_t;
+
+typedef enum
+{
+    RELEASE,
+    PRESS
+} press_t;
+
+typedef struct
+{
+    key_t key;
+    press_t press;
+} event_t;
 
 #endif
 
