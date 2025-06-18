@@ -68,8 +68,6 @@ _start:
     sti
 
     ; booting finished, give control to the main kernel code
-    push idtp
-    push gdtp
     call kmain
 
     jmp halt

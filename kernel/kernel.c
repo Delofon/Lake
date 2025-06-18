@@ -12,10 +12,10 @@
 void halt();
 void hang();
 
-void kmain(uint8_t *gdtp, uint32_t *idtp)
+void kmain()
 {
 
-#if 1
+#if 0
     // test display
     const char *b64 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
     for(int i = 0; i < 25; i++)
