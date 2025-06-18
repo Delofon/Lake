@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdint.h>
 
 #include <input.h>
@@ -7,6 +8,7 @@ event_t events[EVENTS_SZ];
 uint8_t eventsi = 0;
 uint8_t eventsnum = 0;
 
+// I haven't checked if any of this works correctly.
 void input_register(event_t ev)
 {
     events[eventsi] = ev;

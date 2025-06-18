@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include <panic.h>
+
 #include "isr.h"
 
 void encode_idt(uint64_t *idtp, uint32_t offset, uint16_t segment, uint8_t gate, uint8_t dpl, uint8_t present)
@@ -9,21 +11,21 @@ void encode_idt(uint64_t *idtp, uint32_t offset, uint16_t segment, uint8_t gate,
     {
         printf("Invalid gate value: 0x%08x\n", gate);
         printf("0x%08x 0x%08x %u %u %u %u\n", (uint32_t)idtp, offset, segment, gate, dpl, present);
-        return;
+        panic("bad interrupt descriptor");
     }
 
     if(dpl > 0b11)
     {
         printf("Invalid dpl value: 0x%08x\n", dpl);
         printf("0x%08x 0x%08x %u %u %u %u\n", (uint32_t)idtp, offset, segment, gate, dpl, present);
-        return;
+        panic("bad interrupt descriptor");
     }
 
     if(present > 1)
     {
         printf("Invalid present value: 0x%08x\n", dpl);
         printf("0x%08x 0x%08x %u %u %u %u\n", (uint32_t)idtp, offset, segment, gate, dpl, present);
-        return;
+        panic("bad interrupt descriptor");
     }
 
     uint8_t *descriptor = (void *)idtp;

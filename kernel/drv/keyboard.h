@@ -5,6 +5,19 @@
 
 #include <input.h>
 
+// response codes
+#define KB_ERR1 0x00
+#define KB_ERR2 0xff
+#define KB_TEST_GOOD 0xaa
+#define KB_ECHO 0xee
+#define KB_ACK 0xfa
+#define KB_TEST_BAD1 0xfc
+#define KB_TEST_BAD2 0xfd
+#define KB_RESEND 0xfe
+
+// scan codes
+#define KB_REL 0xf0
+
 typedef enum
 {
     SCAN1 = 0,
@@ -31,7 +44,9 @@ typedef struct
 {
     uint8_t command;
     uint8_t data;
-} command_t;
+} kbcommand_t;
+
+void processkbscan();
 
 #endif
 

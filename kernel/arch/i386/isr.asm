@@ -24,7 +24,7 @@ extern AlignmentCheck_C
 extern MachineCheck_C
 
 ; IRQ
-extern Keyboard_C
+extern keyboard_irq
 
 extern pic_eoi
 
@@ -65,7 +65,7 @@ global Keyboard
 Keyboard:
     pusha
 
-    call Keyboard_C
+    call keyboard_irq
 
     push 1
     call pic_eoi
