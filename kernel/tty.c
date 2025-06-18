@@ -2,9 +2,7 @@
 #include <stdint.h>
 
 #include <panic.h>
-#include <drv/keyboard.h>
-
-#include "input.h"
+#include <input.h>
 
 typedef union
 {
@@ -25,6 +23,9 @@ const char ukeytoascii[NUM_KEYS] = "\000!@#$%^&*()QWERTYUIOPASDFGHJKLZXCVBNM_+\0
 void processevent(event_t event)
 {
     key_t key = event.key;
+    if(key == KEY_RESERVED)
+        return;
+
     if(key == KEY_LSHIFT)
     {
         ttystate.shift = event.press;
@@ -50,11 +51,11 @@ void processevent(event_t event)
 
 void processtty()
 {
-    event_t ev = kbevent_pop();
-    while(ev.key != KEY_RESERVED)
+    event_t ev = {0};
+    do
     {
+        ev = input_pop();
         processevent(ev);
-        ev = kbevent_pop();
-    }
+    } while(ev.key != KEY_RESERVED);
 }
 

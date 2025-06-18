@@ -6,34 +6,6 @@
 
 #include "keyboard.h"
 
-// TODO: Maybe should be moved somewhere input device agnostic?
-#define KBEVENTS_SZ 4
-event_t kbevents[KBEVENTS_SZ];
-uint8_t kbeventsi = 0;
-uint8_t kbeventsnum = 0;
-
-void kbevent_append(event_t ev)
-{
-    kbevents[kbeventsi] = ev;
-    kbeventsi++;
-    if(kbeventsnum == KBEVENTS_SZ)
-        kbeventsi %= KBEVENTS_SZ;
-    else
-        kbeventsnum++;
-}
-
-event_t kbevent_pop()
-{
-    if(kbeventsnum == 0)
-        return (event_t){0};
-
-    kbeventsnum--;
-    kbeventsi--;
-    kbeventsi %= KBEVENTS_SZ;
-
-    return kbevents[kbeventsi];
-}
-
 static kbstate_t kbstate = { .state = 0u };
 static uint8_t scanstate = 0;
 
@@ -48,13 +20,13 @@ void processkbscan()
         case 0:
             {
                 if(scancode == 0x16)
-                    kbevent_append((event_t){ .key = KEY_U, .press = PRESS });
+                    input_register((event_t){ .key = KEY_U, .press = PRESS });
                 else if(scancode == 0x2a)
-                    kbevent_append((event_t){ .key = KEY_LSHIFT, .press = PRESS});
+                    input_register((event_t){ .key = KEY_LSHIFT, .press = PRESS});
                 else if(scancode == 0x96)
-                    kbevent_append((event_t){ .key = KEY_U, .press = RELEASE});
+                    input_register((event_t){ .key = KEY_U, .press = RELEASE});
                 else if(scancode == 0xaa)
-                    kbevent_append((event_t){ .key = KEY_LSHIFT, .press = RELEASE});
+                    input_register((event_t){ .key = KEY_LSHIFT, .press = RELEASE});
                 else if(scancode == 0xf0)
                     scanstate++;
             }

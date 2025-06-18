@@ -68,5 +68,8 @@ typedef struct
     press_t press;
 } event_t;
 
+void input_register(event_t ev);
+event_t input_pop();
+
 #endif
 

@@ -33,8 +33,5 @@ typedef struct
     uint8_t data;
 } command_t;
 
-void processkbscan();
-event_t kbevent_pop();
-
 #endif
 
