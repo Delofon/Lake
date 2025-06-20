@@ -26,27 +26,25 @@ void processevent(event_t event)
     if(key == KEY_RESERVED)
         return;
 
-    if(key == KEY_LSHIFT)
+    if(key == KEY_LSHIFT || key == KEY_RSHIFT)
     {
         ttystate.shift = event.press;
+        return;
     }
-    else
+
+    if(event.press == RELEASE)
+        return;
+
+    if(key >= NUM_KEYS)
     {
-        if(event.press == RELEASE)
-            return;
-
-        if(key >= NUM_WRKEYS)
-        {
-            printf("tty.c_processevent: %u passed as key num\n", key);
-            panic("bad event num");
-        }
-
-        if(ttystate.shift)
-            putchar(ukeytoascii[key]);
-        else
-            putchar(lkeytoascii[key]);
-
+        printf("tty.c_processevent: %u passed as key num\n", key);
+        panic("bad event num");
     }
+
+    if(ttystate.shift)
+        putchar(ukeytoascii[key]);
+    else
+        putchar(lkeytoascii[key]);
 }
 
 void processtty()
