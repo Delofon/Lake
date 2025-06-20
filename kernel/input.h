@@ -56,12 +56,12 @@ typedef enum
     KEY_SLASH,
 
     KEY_SPACE,
+    KEY_RET,
     KEY_BACKTICK,
 
     NUM_WRKEYS,
 
     KEY_BACKSP = NUM_WRKEYS,
-    KEY_RET,
 
     KEY_ESC,
     KEY_TAB,
@@ -105,6 +105,7 @@ typedef enum
     KEY_DOWN,
     KEY_RIGHT,
 
+    // numpad
     KEY_NUM,
     KEY_NSLASH,
     KEY_NMUL,
@@ -122,6 +123,31 @@ typedef enum
     KEY_NRET,
     KEY_NZERO,
     KEY_NDOT,
+
+    // multimedia
+    KEY_WWW,
+    KEY_PTRACK,
+    KEY_WWWFAV,
+    KEY_WWWREF,
+    KEY_DVOL,
+    KEY_MUTE,
+    KEY_WWWSTOP,
+    KEY_CALC,
+    KEY_WWWFOR,
+    KEY_IVOL,
+    KEY_PLAY,
+    KEY_WWWBACK,
+    KEY_WWWHOME,
+    KEY_STOP,
+    KEY_PC,
+    KEY_MAIL,
+    KEY_NTRACK,
+    KEY_SEL,
+
+    // acpi
+    KEY_POWER,
+    KEY_SLEEP,
+    KEY_WAKE,
 
     NUM_KEYS
 } key_t;

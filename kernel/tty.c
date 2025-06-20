@@ -17,8 +17,8 @@ typedef union
 
 ttystate_t ttystate = { .state = 0u };
 
-const char lkeytoascii[NUM_WRKEYS] = "\0001234567890-=qwertyuiop[]asdfghjkl;'\\zxcvbnm,./ `";
-const char ukeytoascii[NUM_WRKEYS] = "\000!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>? ~";
+const char lkeytoascii[NUM_WRKEYS] = "\0001234567890-=qwertyuiop[]asdfghjkl;'\\zxcvbnm,./ \n`";
+const char ukeytoascii[NUM_WRKEYS] = "\000!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>? \n~";
 
 void processevent(event_t event)
 {
@@ -41,6 +41,7 @@ void processevent(event_t event)
         panic("bad event num");
     }
 
+    // probably should handle numpad keys as well
     if(key >= NUM_WRKEYS)
         return;
 
