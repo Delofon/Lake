@@ -25,6 +25,7 @@ uint8_t vga_init()
     return 0;
 }
 
+static uint8_t isputs = 0;
 void vga_putchar(const char c)
 {
     if(c == '\n')
@@ -39,15 +40,17 @@ void vga_putchar(const char c)
     vga_buf[vga_coordtoi()] = vga_color << 8 | c;
     vga_x++;
 
-    vga_cursor_move(vga_x, vga_y);
+    if(!isputs)
+        vga_cursor_move(vga_x, vga_y);
 }
 
 void vga_puts(const char *s)
 {
+    isputs = 1;
     while(*s)
         vga_putchar(*(s++));
-
-    //vga_cursor_move(vga_x, vga_y);
+    vga_cursor_move(vga_x, vga_y);
+    isputs = 0;
 }
 
 void vga_linefeed()
@@ -57,6 +60,7 @@ void vga_linefeed()
 
     if(vga_y >= VGA_HEIGHT)
         vga_scroll();
+    vga_cursor_move(vga_x, vga_y);
 }
 
 void vga_scroll()
