@@ -14,7 +14,6 @@ void hang();
 
 void kmain()
 {
-
 #if 0
     // test display
     const char *b64 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
