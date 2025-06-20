@@ -17,8 +17,8 @@ typedef union
 
 ttystate_t ttystate = { .state = 0u };
 
-const char lkeytoascii[NUM_KEYS] = "\0001234567890qwertyuiopasdfghjklzxcvbnm-=\0 \0\n";
-const char ukeytoascii[NUM_KEYS] = "\000!@#$%^&*()QWERTYUIOPASDFGHJKLZXCVBNM_+\0 \0\n";
+const char lkeytoascii[NUM_WRKEYS] = "\000`1234567890-=qwertyuiop[]asdfghjkl;'\\zxcvbnm,./ ";
+const char ukeytoascii[NUM_WRKEYS] = "\000~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>? ";
 
 void processevent(event_t event)
 {
@@ -35,7 +35,7 @@ void processevent(event_t event)
         if(event.press == RELEASE)
             return;
 
-        if(key >= NUM_KEYS)
+        if(key >= NUM_WRKEYS)
         {
             printf("tty.c_processevent: %u passed as key num\n", key);
             panic("bad event num");
