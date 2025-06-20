@@ -7,8 +7,6 @@ typedef enum
 {
     KEY_RESERVED = 0,
 
-    KEY_BACKTICK,
-
     KEY_ONE,
     KEY_TWO,
     KEY_THREE,
@@ -58,6 +56,7 @@ typedef enum
     KEY_SLASH,
 
     KEY_SPACE,
+    KEY_BACKTICK,
 
     NUM_WRKEYS,
 
