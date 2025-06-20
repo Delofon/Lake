@@ -41,6 +41,9 @@ void processevent(event_t event)
         panic("bad event num");
     }
 
+    if(key >= NUM_WRKEYS)
+        return;
+
     if(ttystate.shift)
         putchar(ukeytoascii[key]);
     else
