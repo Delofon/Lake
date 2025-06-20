@@ -30,9 +30,12 @@ typedef union
     uint8_t state;
     struct
     {
-        uint8_t null : 3;
+        uint8_t null : 1;
 
         scanset_t scan : 2;
+
+        uint8_t release  : 1;
+        uint8_t cmd_sent : 1;
 
         uint8_t num    : 1;
         uint8_t caps   : 1;

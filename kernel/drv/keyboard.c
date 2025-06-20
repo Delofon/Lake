@@ -9,7 +9,6 @@
 #include "keyboard.h"
 
 static kbstate_t kbstate = { .state = 0u };
-static uint8_t scanstate = 0;
 
 void kb_init()
 {
@@ -28,46 +27,46 @@ void keyboard_irq()
     }
 }
 
-uint8_t release = 0;
-
 void processkbscan()
 {
     if(scancode == 0)
         return;
 
-    // handle response codes
-    switch(scancode)
+    if(kbstate.cmd_sent)
     {
-        case KB_ERR1:
-        case KB_ERR2:
-            // do something?
-            scancode = 0;
-            return;
-        // KB_TEST_GOOD response code 0xaa conflicts with
-        // lshift scan1 release code 0xaa
-        //case KB_TEST_GOOD:
-        //    // TODO: confirm kb self test
-        //    scancode = 0;
-        //    return;
-        case KB_ECHO:
-            // echo successful
-            scancode = 0;
-            return;
-        case KB_ACK:
-            // TODO: pop command
-            scancode = 0;
-            return;
-        case KB_TEST_BAD1:
-        case KB_TEST_BAD2:
-            // do something?
-            scancode = 0;
-            return;
-        case KB_RESEND:
-            // TODO: resend command
-            scancode = 0;
-            return;
+        // handle response codes
+        switch(scancode)
+        {
+            case KB_ERR1:
+            case KB_ERR2:
+                // do something?
+                scancode = 0;
+                return;
+            case KB_TEST_GOOD:
+                // TODO: confirm kb self test
+                scancode = 0;
+                return;
+            case KB_ECHO:
+                // echo successful
+                scancode = 0;
+                return;
+            case KB_ACK:
+                // TODO: pop command
+                scancode = 0;
+                return;
+            case KB_TEST_BAD1:
+            case KB_TEST_BAD2:
+                // do something?
+                scancode = 0;
+                return;
+            case KB_RESEND:
+                // TODO: resend command
+                scancode = 0;
+                return;
+        }
     }
 
+    static uint8_t scanstate = 0;
     // in scan2, all key events are at most 8 bytes wide
     // FIXME: currently using scan1 as a temporary PoC
     switch(scanstate)
