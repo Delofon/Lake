@@ -173,7 +173,7 @@ void processkbscan()
                     }
                     if(sc == 0xe0)
                     {
-                        ofs += 0x90;
+                        ofs = 0x80;
                         break;
                     }
                     input_register((event_t){ scan2[sc+ofs], !kbstate.release});

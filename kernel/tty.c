@@ -50,7 +50,7 @@ void processevent(event_t event)
 
     if(key >= NUM_KEYS)
     {
-        printf("tty.c_processevent: %u passed as key num\n", key);
+        printf("\ntty.c:processevent: 0x%08x passed as key num\n", key);
         panic("bad event num");
     }
 
