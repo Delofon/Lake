@@ -1,5 +1,5 @@
-#ifndef KEYBOARD_H_
-#define KEYBOARD_H_
+#ifndef PCKEYBOARD_H_
+#define PCKEYBOARD_H_
 
 #include <stdint.h>
 
@@ -20,7 +20,7 @@
 
 typedef enum
 {
-    SCAN1 = 0,
+    SCAN1 = 1,
     SCAN2,
     SCAN3
 } scanset_t;
@@ -49,6 +49,8 @@ typedef struct
     uint8_t data;
 } kbcommand_t;
 
+void ps2_init();
+void kb_init();
 void processkbscan();
 
 #endif

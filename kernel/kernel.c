@@ -4,7 +4,7 @@
 
 #include <arch/i386/isr.h>
 #include <arch/i386/vga.h>
-#include <drv/keyboard.h>
+#include <drv/pckeyboard.h>
 
 #include <panic.h>
 #include <tty.h>
@@ -27,6 +27,9 @@ void kmain()
 #else
     printf("Lake\n\n");
 #endif
+
+    ps2_init();
+    kb_init();
 
     while(1)
     {

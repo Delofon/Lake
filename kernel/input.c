@@ -3,30 +3,31 @@
 
 #include <input.h>
 
-#define EVENTS_SZ 4
-event_t events[EVENTS_SZ];
-uint8_t eventsi = 0;
-uint8_t eventsnum = 0;
+#define EVZ 4
+event_t evs[EVZ];
+uint8_t evi = 0;
+uint8_t evn = 0;
 
-// I haven't checked if any of this works correctly.
 void input_register(event_t ev)
 {
-    events[eventsi] = ev;
-    eventsi++;
-    if(eventsnum == EVENTS_SZ)
-        eventsi %= EVENTS_SZ;
-    else
-        eventsnum++;
+    evs[(evn + evi) % EVZ] = ev;
+
+    evn++;
+    evn %= EVZ;
 }
+
 event_t input_pop()
 {
-    if(eventsnum == 0)
-        return (event_t){0};
+    if(evn == 0)
+        return (event_t){0,0};
 
-    eventsnum--;
-    eventsi--;
-    eventsi %= EVENTS_SZ;
+    event_t ev = evs[evi];
 
-    return events[eventsi];
+    evi++;
+    evi %= EVZ;
+    evn--;
+    evn %= EVZ;
+
+    return ev;
 }
 

@@ -7,16 +7,17 @@ typedef enum
 {
     KEY_RESERVED = 0,
 
-    KEY_ONE,
-    KEY_TWO,
-    KEY_THREE,
-    KEY_FOUR,
-    KEY_FIVE,
-    KEY_SIX,
-    KEY_SEVEN,
-    KEY_EIGHT,
-    KEY_NINE,
-    KEY_ZERO,
+    // ASCII
+    KEY_1,
+    KEY_2,
+    KEY_3,
+    KEY_4,
+    KEY_5,
+    KEY_6,
+    KEY_7,
+    KEY_8,
+    KEY_9,
+    KEY_0,
     KEY_MINUS,
     KEY_EQUALS,
 
@@ -57,7 +58,7 @@ typedef enum
 
     KEY_SPACE,
     KEY_RET,
-    KEY_BACKTICK,
+    KEY_BKT,
 
     NUM_WRKEYS,
 

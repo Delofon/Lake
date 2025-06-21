@@ -9,6 +9,8 @@ typedef union
     uint8_t state;
     struct
     {
+        uint8_t null : 5;
+
         uint8_t ctrl  : 1;
         uint8_t shift : 1;
         uint8_t alt   : 1;
