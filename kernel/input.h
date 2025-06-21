@@ -19,7 +19,7 @@ typedef enum
     KEY_9,
     KEY_0,
     KEY_MINUS,
-    KEY_EQUALS,
+    KEY_EQU,
 
     KEY_Q,
     KEY_W,
@@ -62,7 +62,7 @@ typedef enum
 
     NUM_WRKEYS,
 
-    KEY_BACKSP = NUM_WRKEYS,
+    KEY_BKSP = NUM_WRKEYS,
 
     KEY_ESC,
     KEY_TAB,
@@ -108,21 +108,21 @@ typedef enum
 
     // numpad
     KEY_NUM,
-    KEY_NSLASH,
+    KEY_NDIV,
     KEY_NMUL,
     KEY_NSUB,
-    KEY_NSEVEN,
-    KEY_NEIGHT,
-    KEY_NNINE,
+    KEY_N7,
+    KEY_N8,
+    KEY_N9,
     KEY_NADD,
-    KEY_NFOUR,
-    KEY_NFIVE,
-    KEY_NSIX,
-    KEY_NONE,
-    KEY_NTWO,
-    KEY_NTHREE,
+    KEY_N4,
+    KEY_N5,
+    KEY_N6,
+    KEY_N1,
+    KEY_N2,
+    KEY_N3,
     KEY_NRET,
-    KEY_NZERO,
+    KEY_N0,
     KEY_NDOT,
 
     // multimedia

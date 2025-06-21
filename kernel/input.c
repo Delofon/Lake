@@ -3,7 +3,7 @@
 
 #include <input.h>
 
-#define EVZ 4
+#define EVZ 32
 event_t evs[EVZ];
 uint8_t evi = 0;
 uint8_t evn = 0;
