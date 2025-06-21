@@ -4,6 +4,8 @@
 #include <panic.h>
 #include <input.h>
 
+#include <arch/i386/vga.h>
+
 typedef union
 {
     uint8_t state;
@@ -28,6 +30,7 @@ void processevent(event_t event)
     if(key == KEY_RESERVED)
         return;
 
+    // TODO: add an abstraction layer for vga access
     if(key == KEY_LSHIFT || key == KEY_RSHIFT)
     {
         ttystate.shift = event.press;
@@ -36,6 +39,14 @@ void processevent(event_t event)
 
     if(event.press == RELEASE)
         return;
+
+    if(key == KEY_BKSP)
+    {
+        vga_x--;
+        vga_putchar(' ');
+        vga_x--;
+        vga_cursor_move(vga_x, vga_y);
+    }
 
     if(key >= NUM_KEYS)
     {

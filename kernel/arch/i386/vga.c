@@ -60,6 +60,7 @@ void vga_linefeed()
 
     if(vga_y >= VGA_HEIGHT)
         vga_scroll();
+
     vga_cursor_move(vga_x, vga_y);
 }
 
