@@ -164,35 +164,34 @@ void processkbscan()
         switch(scanstate)
         {
             case 0:
+                if(sc == 0xe1)
                 {
-                    if(sc == 0xe1)
-                    {
-                        // this is pause pressed
-                        scanstate = 7;
-                        break;
-                    }
-                    if(sc == 0xe0)
-                    {
-                        ofs = 0x80;
-                        break;
-                    }
-                    input_register((event_t){ scan2[sc+ofs], !kbstate.release});
-                    ofs = 0;
-                    kbstate.release = 0;
+                    // this is pause pressed
+                    scanstate = 1;
+                    break;
                 }
+                if(sc == 0xe0)
+                {
+                    ofs = 0x80;
+                    break;
+                }
+                input_register((event_t){scan2[sc+ofs], !kbstate.release});
+                ofs = 0;
+                kbstate.release = 0;
                 break;
-            case 7:
+            case 1:
                 if(sc == 0x77)
                     scanstate++;
                 break;
-            case 8:
+            case 2:
                 if(sc == 0x77)
                 {
                     input_register((event_t){KEY_PAUSE, PRESS});
                     input_register((event_t){KEY_PAUSE, RELEASE});
                     kbstate.release = 0;
+                    scanstate = 0;
                 }
-                scanstate = 0;
+                break;
             default:
                 printf("processkbscan: invalid state %u\n", scanstate);
                 panic("bad scan state");
