@@ -44,13 +44,13 @@ _start:
     call setup_gdt
     add esp, 4
 
+    ; set gdtr register
+    call setgdt
+
     ; turn on pmode
     mov eax, cr0
     or  eax, PROTECTION_ENABLE
     mov cr0, eax
-
-    ; set gdtr register
-    call setgdt
 
     ; fill interrupt table
     push idtp
