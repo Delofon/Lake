@@ -53,66 +53,6 @@ void keyboard_irq()
     }
 }
 
-void hangifb(uint8_t *p);
-
-static uint8_t ret = 0xff;
-uint8_t kb_processresponse()
-{
-    kbstate.cmd_sent = 0;
-
-    uint8_t scancode = sc_pop();
-
-    switch(scancode)
-    {
-        case KB_ERR1:
-        case KB_ERR2:
-            // do something?
-            break;
-        case KB_TEST_GOOD:
-        case KB_ECHO:
-        case KB_ACK:
-            //kb_pop_command();
-            break;
-        case KB_TEST_BAD1:
-        case KB_TEST_BAD2:
-            // do something?
-            break;
-        case KB_RESEND:
-            // command will be resent later
-            break;
-    }
-
-    scancode = 0;
-
-    return ret;
-}
-
-#if 0
-void kb_send_command(uint8_t c, uint8_t d)
-{
-    kb_push_command(c, d);
-
-    do
-    {
-        uint8_t status = inb(0x64) & 0x2;
-        if(!status)
-        {
-            io_wait();
-            outb(0x60, cs[ci].command);
-            if(cs[ci].data != 0xff)
-            {
-                io_wait();
-                outb(0x60, cs[ci].data);
-            }
-        }
-
-        // XXX: do driver init in separate threads
-        hangifb(&scs[sci]);
-        kb_processresponse();
-    } while(kbstate.cmd_sent);
-}
-#endif
-
 void hang();
 
 // TODO: properly test PS/2
