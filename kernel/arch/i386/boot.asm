@@ -1,41 +1,38 @@
+section .multiboot
+
+MAGIC    equ 0x1badb002
+
 MBALIGN  equ 1 << 0
 MEMINFO  equ 1 << 1
 MBFLAGS  equ MBALIGN | MEMINFO
-MAGIC    equ 0x1badb002
+
 CHECKSUM equ -(MAGIC + MBFLAGS)
 
-PROTECTION_ENABLE equ 1
-
-section .multiboot
 align 4
     dd MAGIC
     dd MBFLAGS
     dd CHECKSUM
 
-section .bss
+section .trampoline.data
+
 align 16
 resb 16384
-stack_space:
+trampoline_stack:
 
-section .text
+section .trampoline.text
 
 extern gdtp
-extern idtp
 
-extern vga_init
 extern setup_gdt
 extern setgdt
-extern setup_idt
-extern setidt
-extern pic_init
-extern kmain
 
-global _start:function (_start.end - _start)
-_start:
-    mov esp, stack_space
+PE equ 1 << 0
+PG equ 1 << 31
+
+global trampoline:function
+trampoline:
+    mov esp, trampoline_stack
     mov ebp, esp
-
-    call vga_init
 
     call enable_a20
 
@@ -49,8 +46,38 @@ _start:
 
     ; turn on pmode
     mov eax, cr0
-    or  eax, PROTECTION_ENABLE
+    or  eax, PE
     mov cr0, eax
+
+    ; TODO: identity page trampoline
+    ; TODO: create basic page directory for higher half
+    ; TODO: properly jump to _start vma
+    hlt
+
+    jmp _start
+
+; TODO: more sophisticated a20
+enable_a20:
+    mov dx, 0x92
+    in al, dx
+    or al, 2
+    out dx, al
+
+    ret
+
+section .text
+
+extern vga_init
+extern setup_idt
+extern setidt
+extern pic_init
+extern kmain
+
+extern idtp
+
+global _start:function
+_start:
+    call vga_init
 
     ; fill interrupt table
     push idtp
@@ -71,7 +98,6 @@ _start:
     call kmain
 
     jmp halt
-.end:
 
 ; halt - turn off operations
 ; hang - stop eating cpu cycles until interrupt
@@ -87,11 +113,4 @@ hang:
     hlt
     ret
 
-enable_a20:
-    mov dx, 0x92
-    in al, dx
-    or al, 2
-    out dx, al
-
-    ret
 
