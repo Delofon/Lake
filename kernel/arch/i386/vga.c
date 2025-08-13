@@ -15,7 +15,7 @@ uint8_t vga_init()
     vga_y = 0;
 
     vga_setcol(VGA_LGRAY, VGA_BLACK);
-    vga_buf = (uint16_t*)0xb8000;
+    vga_buf = (uint16_t *)0xb8000;
 
     for(int i = 0; i < VGA_SIZE; i++)
         vga_buf[i] = vga_color << 8 | ' ';
