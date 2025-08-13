@@ -1,7 +1,9 @@
-[ ] Higher half
-
 [ ] Memory management
 [ ] - Paging
+[ ] - - Basic bootstrap paging
+[ ] - - Higher half
+
+[ ] Simple shell
 
 [ ] Process management
 
