@@ -38,7 +38,7 @@ default: mkdir $(BUILD)/lake
 
 -include $(DEPS)
 
-$(BUILD)/lake: $(LAKE_OBJECTS) $(BUILD)/libk.a makefile
+$(BUILD)/lake: $(LAKE_OBJECTS) $(BUILD)/libk.a makefile kernel/arch/i386/linker.ld
 > @mkdir -p $(dir $@)
 > $(CC) $(CFLAGS) -o $@ $(LAKE_OBJECTS) $(LIBS)
 > grub-file --is-x86-multiboot $(BUILD)/lake
