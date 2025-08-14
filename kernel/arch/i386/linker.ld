@@ -4,58 +4,51 @@ SECTIONS
 {
     . = 2M;
 
-    lake_start = .;
+    lake_lma_start = .;
+    lake_vla_start = 0xc0000000;
 
-    .multiboot BLOCK(4K) :
-    ALIGN(4K)
+    .multiboot ALIGN(4K) :
     {
         *(.multiboot)
     }
 
-    .trampoline BLOCK(4K) :
-    ALIGN(4K)
+    .trampoline ALIGN(4K) :
     {
         *(.trampoline.data)
         *(.trampoline.text)
-
-        /* A workaround to have setgdt available
-         * in trampoline code.
-         */
-        *setgdt.c.o(.text)
     }
 
-    offset = 0xc0000000;
-    . += offset;
+    trampoline_end = .;
+    trampoline_start = ADDR(.trampoline);
 
-    .text BLOCK(4K) :
-    AT(ADDR(.text) - offset)
-    ALIGN(4K)
+    . += lake_vla_start;
+
+    .text ALIGN(4K) :
+    AT(ADDR(.text) - lake_vla_start)
     {
         *(.text)
     }
 
-    .rodata BLOCK(4K) :
-    AT(ADDR(.rodata) - offset)
-    ALIGN(4K)
+    .rodata ALIGN(4K) :
+    AT(ADDR(.rodata) - lake_vla_start)
     {
         *(.rodata)
     }
 
-    .data BLOCK(4K) :
-    AT(ADDR(.data) - offset)
+    .data ALIGN(4K) :
+    AT(ADDR(.data) - lake_vla_start)
     ALIGN(4K)
     {
         *(.data)
     }
 
-    .bss BLOCK(4K) :
-    AT(ADDR(.bss) - offset)
-    ALIGN(4K)
+    .bss ALIGN(4K) :
+    AT(ADDR(.bss) - lake_vla_start)
     {
         *(COMMON)
         *(.bss)
     }
 
-    lake_end = .;
+    lake_lma_end = . - lake_vla_start;
 }
 
