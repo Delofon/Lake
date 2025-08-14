@@ -1,4 +1,4 @@
-section .trampoline.data
+section .data
 global gdtp
 gdtp:
     dq 0
@@ -13,7 +13,7 @@ gdtr:
     dw gdt_size - 1
     dd gdtp
 
-section .trampoline.text
+section .text
 global setgdt
 setgdt:
     cli

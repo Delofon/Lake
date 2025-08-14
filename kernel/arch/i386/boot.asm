@@ -68,8 +68,6 @@ trampoline:
     or  eax, PE | WP | PG
     mov cr0, eax
 
-    hlt
-
     jmp landpad
 
 section .text
