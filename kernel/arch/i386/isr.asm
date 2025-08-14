@@ -50,6 +50,17 @@ GeneralProtectionFault:
     popa
     iret
 
+global PageFault
+PageFault:
+    pusha
+
+    push 0xe
+    call panic_stub
+    add esp, 4
+
+    popa
+    iret
+
 global PIT
 PIT:
     pusha

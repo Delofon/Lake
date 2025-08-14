@@ -51,6 +51,7 @@ void setup_idt(uint64_t *idtp)
     //         idtp+offset   ptr to handler   GDTseg gate dpl p
     encode_idt(idtp+0x8, (uint32_t)DoubleFault, 8, 0b1111, 0, 1);
     encode_idt(idtp+0xd, (uint32_t)GeneralProtectionFault, 8, 0b1111, 0, 1);
+    encode_idt(idtp+0xe, (uint32_t)PageFault, 8, 0b1111, 0, 1);
 
     encode_idt(idtp+(0 + 0x20), (uint32_t)PIT, 8, 0b1110, 0, 1);
     encode_idt(idtp+(1 + 0x20), (uint32_t)Keyboard, 8, 0b1110, 0, 1);
