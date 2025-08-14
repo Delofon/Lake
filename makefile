@@ -28,7 +28,8 @@ LIBC_COBJECTS := $(patsubst %, $(BUILD)/%.o, $(LIBC_CSOURCES))
 LIBC_OBJECTS := $(LIBC_COBJECTS)
 
 DEPS := $(patsubst %, $(BUILD)/%.d, $(LAKE_CSOURCES)) \
-		$(patsubst %, $(BUILD)/%.d, $(LIBC_CSOURCES))
+		$(patsubst %, $(BUILD)/%.d, $(LIBC_CSOURCES)) \
+		$(patsubst %, $(BUILD)/%.d, $(LAKE_ASMOBJECTS))
 
 CWARNINGS := -Wall -Wextra -Werror=vla -Werror=shadow -Wswitch-enum \
              -Wno-strict-prototypes
@@ -47,13 +48,13 @@ $(BUILD)/libk.a: $(LIBC_OBJECTS)
 > @mkdir -p $(dir $@)
 > $(AR) rcs $@ $(LIBC_OBJECTS)
 
-$(BUILD)/%.c.o:%.c makefile
+$(BUILD)/%.c.o: %.c makefile
 > @mkdir -p $(dir $@)
 > $(CC) $(CFLAGS) $(CWARNINGS) -MMD -MP -c -o $@ $<
 
 $(BUILD)/%.asm.o: %.asm makefile
 > @mkdir -p $(dir $@)
-> $(AS) $(ASFLAGS) -o $@ $<
+> $(AS) $(ASFLAGS) -MD -MP -o $@ $<
 
 .PHONY: grub-iso
 grub-iso: $(BUILD)/lake
@@ -67,6 +68,10 @@ grub-iso: $(BUILD)/lake
 .PHONY: qemu
 qemu: default
 > qemu-system-i386 -kernel $(BUILD)/lake
+
+.PHONY: gdb
+gdb: default
+> qemu-system-i386 -s -S -kernel $(BUILD)/lake
 
 .PHONY: qemu-dint
 qemu-dint: default
