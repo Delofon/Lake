@@ -1,17 +1,20 @@
+[ ] Better build system
+
 [ ] Memory management
-[ ] - Paging
-[ ] - - Basic bootstrap paging
-[ ] - - Higher half
+- [ ] Paging
+- - [ ] On demand page allocation
+- - [x] Basic bootstrap paging
+- - [x] Higher half
 
 [ ] Simple shell
 
 [ ] Process management
 
 [ ] Timers
-[ ] - HAL
-[ ] - PIT
-[ ] - HPET
-[ ] - APIC
+- [ ] HAL
+- [ ] PIT
+- [ ] HPET
+- [ ] APIC
 
 <...>
 
