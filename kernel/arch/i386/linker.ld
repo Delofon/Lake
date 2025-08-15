@@ -18,9 +18,6 @@ SECTIONS
         *(.trampoline.text)
     }
 
-    trampoline_end = .;
-    trampoline_start = ADDR(.trampoline);
-
     . += lake_vla_start;
 
     .text ALIGN(4K) :

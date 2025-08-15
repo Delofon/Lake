@@ -6,8 +6,6 @@
 extern void lake_lma_start;
 extern void lake_lma_end;
 extern void lake_vla_start;
-extern void trampoline_start;
-extern void trampoline_end;
 
 __attribute__((section(".trampoline.text")))
 void init_kpd(uint32_t *kpd, uint32_t *kpt1)
