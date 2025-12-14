@@ -34,7 +34,6 @@ SECTIONS
 
     .data ALIGN(4K) :
     AT(ADDR(.data) - lake_vla_start)
-    ALIGN(4K)
     {
         *(.data)
     }

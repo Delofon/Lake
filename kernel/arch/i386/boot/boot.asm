@@ -15,8 +15,9 @@ align 4
 
 section .trampoline.data
 
+; wasted space :(
 align 16
-resb 64 ; trampoline does not need large stack
+resd 16
 trampoline_stack:
 
 section .trampoline.text
@@ -38,6 +39,9 @@ global trampoline:function
 trampoline:
     mov esp, trampoline_stack
     mov ebp, esp
+
+    push eax
+    push ebx
 
     ; should probably be done by bootloader and not the kernel?
     ; we are already in pmode by the time we're in the kernel
@@ -61,6 +65,15 @@ trampoline:
 
     add esp, 8
 
+    test eax, eax
+    jz .ok
+
+    cli
+.notok:
+    hlt
+    jmp .notok
+
+.ok:
     mov cr3, ebx
 
     ; turn on paging
@@ -68,14 +81,17 @@ trampoline:
     or  eax, PE | WP | PG
     mov cr0, eax
 
+    pop ebx
+    pop eax
+
     jmp landpad
 
 section .text
 landpad:
     mov dword [kpd], 0x0
 
-    mov eax, cr3
-    mov cr3, eax
+    mov edx, cr3
+    mov cr3, edx
 
     jmp _start
 
@@ -84,15 +100,14 @@ section .bss
 global kpd
 global kpt1
 
+align 16
+resb 16384
+stack:
 align 4096
 kpd:
 resd 1024
 kpt1:
 resd 1024
-; looks like stack may overflow into page tables... oops
-align 16
-resb 16384
-stack:
 
 section .text
 
@@ -105,6 +120,7 @@ extern setidt
 extern vga_init
 extern pic_init
 extern kmain
+extern halt
 
 extern gdtp
 extern idtp
@@ -113,6 +129,9 @@ global _start:function
 _start:
     mov esp, stack
     mov ebp, esp
+
+    push eax
+    push ebx
 
     call vga_init
 
@@ -139,23 +158,11 @@ _start:
     ; setting gdt and idt required clearing interrupt flag so reset it
     sti
 
+    extern i386_init
+    call i386_init
+
     ; booting finished, give control to the main kernel code
     call kmain
 
     jmp halt
-
-; halt - turn off operations
-; hang - stop eating cpu cycles until interrupt
-global halt
-halt:
-    cli
-.hlt:
-    hlt
-    jmp .hlt
-
-global hang
-hang:
-    hlt
-    ret
-
 

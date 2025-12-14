@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include <limits.h>
 
-#include <arch/i386/isr.h>
 #include <arch/i386/vga.h>
 #include <drv/pckeyboard.h>
 
@@ -12,7 +11,7 @@
 void halt();
 void hang();
 
-void kmain()
+void kmain(uint32_t mbi, uint32_t magic)
 {
 #if 0
     // test display
