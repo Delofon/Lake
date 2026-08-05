@@ -52,7 +52,8 @@ default: $(BUILD)/lake
 $(BUILD)/lake: $(LAKE_OBJECTS) $(BUILD)/libk.a makefile $(LDS)
 > @mkdir -p $(dir $@)
 > $(CC) $(CFLAGS) -o $@ $(LAKE_OBJECTS) $(LIBS)
-> grub-file --is-x86-multiboot $(BUILD)/lake
+> grub-file --is-x86-multiboot  $(BUILD)/lake
+> grub-file --is-x86-multiboot2 $(BUILD)/lake
 
 $(BUILD)/libk.a: $(LIBC_OBJECTS)
 > @mkdir -p $(dir $@)
@@ -66,19 +67,7 @@ $(BUILD)/%.asm.o: %.asm makefile
 > @mkdir -p $(dir $@)
 > $(AS) $(ASFLAGS) -MD -MP -o $@ $<
 
-$(EXT)/include/multiboot.h:
-> @mkdir -p $(dir $@)
-> curl --output-dir $(dir $@) -OL https://cgit.git.savannah.gnu.org/cgit/grub.git/plain/doc/multiboot.h?h=multiboot
-
-$(EXT)/include/multiboot2.h:
-> @mkdir -p $(dir $@)
-> curl --output-dir $(dir $@) -OL https://cgit.git.savannah.gnu.org/cgit/grub.git/plain/doc/multiboot2.h?h=multiboot2
-
-.PHONY: download-mb-hdr
-download-mb-hdr: $(EXT)/include/multiboot.h $(EXT)/include/multiboot2.h
-
-.PHONY: grub-iso
-grub-iso: $(BUILD)/lake
+$(BUILD)/lake.iso: $(BUILD)/lake
 > mkdir -p $(BUILD)/iso/boot/grub
 >
 > cp $(BUILD)/lake $(BUILD)/iso/boot/lake
@@ -86,24 +75,31 @@ grub-iso: $(BUILD)/lake
 >
 > grub-mkrescue -o $(BUILD)/lake.iso $(BUILD)/iso
 
+.PHONY: grub-iso
+grub-iso: $(BUILD)/lake.iso
+
 .PHONY: qemu
-qemu: default
+qemu: grub-iso
+> qemu-system-i386 $(BUILD)/lake.iso
+
+.PHONY: mb-qemu
+mb-qemu: default
 > qemu-system-i386 -kernel $(BUILD)/lake
 
 .PHONY: gdb
-gdb: default
+mb-gdb: default
 > qemu-system-i386 -s -S -kernel $(BUILD)/lake
 
-.PHONY: qemu-dint
-qemu-dint: default
+.PHONY: mb-qemu-dint
+mb-qemu-dint: default
 > qemu-system-i386 -kernel $(BUILD)/lake -d int --no-reboot
 
-.PHONY: qemu-log
-qemu-log: default
+.PHONY: mb-qemu-log
+mb-qemu-log: default
 > qemu-system-i386 -kernel $(BUILD)/lake -d int,cpu_reset --no-reboot
 
 .PHONY: clean
 clean:
 > rm -rf $(BUILD)/
-> rm -rf $(EXT)/
+#> rm -rf $(EXT)/
 
