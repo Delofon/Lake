@@ -7,9 +7,9 @@ SECTIONS
     lake_lma_start = .;
     lake_vla_start = 0xc0000000;
 
-    .multiboot ALIGN(4K) :
+    .multiboot2 ALIGN(4K) :
     {
-        *(.multiboot)
+        *(.multiboot2)
     }
 
     .trampoline ALIGN(4K) :

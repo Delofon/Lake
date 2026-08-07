@@ -1,56 +1,45 @@
-section .multiboot
+section .multiboot2
 
-MAGIC    equ 0x1badb002
+MB2_MAGIC    equ 0xe85250d6
+MB2_ARCH     equ 0
+MB2_SZ       equ MB2_END - MB2_BEGIN
+MB2_CHECKSUM equ -(MB2_MAGIC + MB2_ARCH + MB2_SZ)
 
-MBALIGN  equ 1 << 0
-MEMINFO  equ 1 << 1
-MBFLAGS  equ MBALIGN | MEMINFO
+align 8
+MB2_BEGIN:
+    dd MB2_MAGIC
+    dd MB2_ARCH
+    dd MB2_SZ
+    dd MB2_CHECKSUM
 
-CHECKSUM equ -(MAGIC + MBFLAGS)
+align 8 ; each tag is 8 byte aligned
+t1.b:
+    dw 1 ; request tag
+    dw 0
+    dd t1.e - t1.b
+    dd 4 ; request low up mem
+    dd 6 ; request mem maps
+    dd 1 ; request cmdline
+t1.e:
 
-align 4
-    dd MAGIC
-    dd MBFLAGS
-    dd CHECKSUM
-
-section .trampoline.data
-
-; wasted space :(
-align 16
-resd 16
-trampoline_stack:
+align 8
+    dd 0
+    dd 8
+MB2_END:
 
 section .trampoline.text
 
-; TODO: more sophisticated a20
-enable_a20:
-    mov dx, 0x92
-    in al, dx
-    or al, 2
-    out dx, al
-
-    ret
-
-PE equ 1 << 0
-WP equ 1 << 16
-PG equ 1 << 31
-
 global trampoline:function
 trampoline:
-    mov esp, trampoline_stack
+    ; linker.ld
+    extern lake_vla_start
+
+    mov esp, stack
+    sub esp, lake_vla_start
     mov ebp, esp
 
     push eax
     push ebx
-
-    ; should probably be done by bootloader and not the kernel?
-    ; we are already in pmode by the time we're in the kernel
-    ; thanks to grub so this shouldn't be necessary
-    ; (ideally paging setup would also be moved to bootloader...)
-    ;call enable_a20
-
-    ; linker.ld
-    extern lake_vla_start
 
     lea edi, [kpt1]
     sub edi, lake_vla_start
@@ -76,7 +65,10 @@ trampoline:
 .ok:
     mov cr3, ebx
 
-    ; turn on paging
+    PE equ 1 << 0  ; protection enable
+    WP equ 1 << 16 ; write protect
+    PG equ 1 << 31 ; paging
+
     mov eax, cr0
     or  eax, PE | WP | PG
     mov cr0, eax
@@ -158,6 +150,7 @@ _start:
     ; setting gdt and idt required clearing interrupt flag so reset it
     sti
 
+    ; do more i386 specific initialisation
     extern i386_init
     call i386_init
 

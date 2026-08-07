@@ -1,9 +1,5 @@
 VGA_WIDTH equ 80
 
-section .data
-breakmsg:
-    db "break",0
-
 section .text
 
 extern panic
