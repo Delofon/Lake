@@ -52,7 +52,6 @@ default: $(BUILD)/lake
 $(BUILD)/lake: $(LAKE_OBJECTS) $(BUILD)/libk.a makefile $(LDS)
 > @mkdir -p $(dir $@)
 > $(CC) $(CFLAGS) -o $@ $(LAKE_OBJECTS) $(LIBS)
-> grub-file --is-x86-multiboot  $(BUILD)/lake
 > grub-file --is-x86-multiboot2 $(BUILD)/lake
 
 $(BUILD)/libk.a: $(LIBC_OBJECTS)
@@ -82,24 +81,19 @@ grub-iso: $(BUILD)/lake.iso
 qemu: grub-iso
 > qemu-system-i386 $(BUILD)/lake.iso
 
-.PHONY: mb-qemu
-mb-qemu: default
-> qemu-system-i386 -kernel $(BUILD)/lake
-
 .PHONY: gdb
-mb-gdb: default
-> qemu-system-i386 -s -S -kernel $(BUILD)/lake
+gdb: grub-iso
+> qemu-system-i386 -s -S $(BUILD)/lake.iso
 
-.PHONY: mb-qemu-dint
-mb-qemu-dint: default
-> qemu-system-i386 -kernel $(BUILD)/lake -d int --no-reboot
+.PHONY: qemu-dint
+qemu-dint: grub-iso
+> qemu-system-i386 $(BUILD)/lake.iso -d int --no-reboot
 
-.PHONY: mb-qemu-log
-mb-qemu-log: default
-> qemu-system-i386 -kernel $(BUILD)/lake -d int,cpu_reset --no-reboot
+.PHONY: qemu-log
+qemu-log: grub-iso
+> qemu-system-i386 $(BUILD)/lake.iso -d int,cpu_reset --no-reboot
 
 .PHONY: clean
 clean:
 > rm -rf $(BUILD)/
-#> rm -rf $(EXT)/
 
