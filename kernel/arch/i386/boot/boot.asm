@@ -65,27 +65,17 @@ trampoline:
 .ok:
     mov cr3, ebx
 
-    PE equ 1 << 0  ; protection enable
     WP equ 1 << 16 ; write protect
     PG equ 1 << 31 ; paging
 
     mov eax, cr0
-    or  eax, PE | WP | PG
+    or  eax, WP | PG
     mov cr0, eax
 
     pop ebx
     pop eax
 
-    jmp landpad
-
-section .text
-landpad:
-    mov dword [kpd], 0x0
-
-    mov edx, cr3
-    mov cr3, edx
-
-    jmp _start
+    jmp start
 
 section .bss
 
@@ -117,8 +107,15 @@ extern halt
 extern gdtp
 extern idtp
 
-global _start:function
-_start:
+section .text
+
+global start:function
+start:
+    ; get rid of identity
+    mov dword [kpd], 0x0
+    mov edx, cr3
+    mov cr3, edx
+
     mov esp, stack
     mov ebp, esp
 

@@ -67,7 +67,11 @@ void vga_linefeed()
 void vga_scroll()
 {
     vga_y--;
-    memmove(vga_buf, vga_buf+VGA_WIDTH, VGA_WIDTH*(VGA_HEIGHT-1)*sizeof(vga_buf));
+    memmove(
+        vga_buf,
+        vga_buf+VGA_WIDTH,
+        VGA_WIDTH*(VGA_HEIGHT-1)*sizeof(*vga_buf)
+    );
     for(size_t i = VGA_WIDTH * (VGA_HEIGHT-1); i < VGA_SIZE; i++)
         vga_buf[i] = vga_color << 8 | ' ';
 }
