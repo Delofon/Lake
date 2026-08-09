@@ -1,16 +1,25 @@
 #include <stdint.h>
 
 #include <panic.h>
+#include <arch/i386/vga.h>
+#include <drv/pckeyboard.h>
 
-#define MB2_MAGIC 0x36d76289
+#include <multiboot2.h>
 
-void multiboot2_init(void *, uint32_t);
+void multiboot2_init(void *mbi, uint32_t magic)
+{
+}
 
 void i386_init(void *mbi, uint32_t magic)
 {
-    if(magic == MB2_MAGIC)
+    vga_init((void*)0xc03ff000, 14, 15);
+
+    if(magic == MULTIBOOT2_BOOTLOADER_MAGIC)
         multiboot2_init(mbi, magic);
     else
         panic("invalid magic num");
+
+    ps2_init();
+    kb_init();
 }
 

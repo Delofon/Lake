@@ -31,10 +31,12 @@ typedef enum
 extern size_t vga_x;
 extern size_t vga_y;
 
-extern uint8_t vga_color;
-extern uint16_t *vga_buf;
+extern u8 vga_color;
+extern u16 *vga_buf;
 
-uint8_t vga_init();
+const void *vga_lma = 0xb8000
+
+u8 vga_init(void *vga, u8 scans, u8 scane);
 void vga_putchar(const char c);
 void vga_puts(const char *s);
 void vga_linefeed();

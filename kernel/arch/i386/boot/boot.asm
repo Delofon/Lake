@@ -36,7 +36,6 @@ trampoline:
 
     mov esp, stack
     sub esp, lake_vla_start
-    mov ebp, esp
 
     push eax
     push ebx
@@ -113,16 +112,13 @@ global start:function
 start:
     ; get rid of identity
     mov dword [kpd], 0x0
-    mov edx, cr3
-    mov cr3, edx
+    invlpg [0]
 
     mov esp, stack
     mov ebp, esp
 
     push eax
     push ebx
-
-    call vga_init
 
     ; fill global descriptor table with flat segments
     push gdtp

@@ -14,10 +14,14 @@ LDS := kernel/arch/i386/boot/linker.ld
 INCLUDE_DIRS := -I$(LIBC)/ \
 				-I$(KERNEL)/ \
 				-I$(EXT)/include/ \
+				-Iinclude/
 
 ASFLAGS := -felf32 -g
-#CFLAGS := $(INCLUDE_DIRS) -O2 -std=gnu99 -ffreestanding -MMD -MP
-CFLAGS := $(INCLUDE_DIRS) -Og -ggdb -std=gnu99 -ffreestanding -MMD -MP
+
+# Having include <def.h> in every file would be a huge pain in the ass
+#CFLAGS := $(INCLUDE_DIRS) -include def.h -O2 -std=gnu99 -ffreestanding -MMD -MP
+CFLAGS := $(INCLUDE_DIRS) -include def.h -Og -ggdb -std=gnu99 -ffreestanding -MMD -MP
+
 LIBS := -L$(BUILD)/ -lgcc -lk -nostdlib -T $(LDS)
 
 LAKE_CSOURCES := $(wildcard $(KERNEL)/arch/i386/*.c) \

@@ -6,26 +6,26 @@
 size_t vga_x;
 size_t vga_y;
 
-uint8_t vga_color;
-uint16_t *vga_buf;
+u8 vga_color;
+u16 *vga_buf;
 
-uint8_t vga_init()
+u8 vga_init(void *vga, u8 scans, u8 scane)
 {
     vga_x = 0;
     vga_y = 0;
 
     vga_setcol(VGA_LGRAY, VGA_BLACK);
-    vga_buf = (uint16_t *)0xc03ff000;
+    vga_buf = vga;
 
     for(int i = 0; i < VGA_SIZE; i++)
         vga_buf[i] = vga_color << 8 | ' ';
 
-    vga_cursor_init(14, 15);
+    vga_cursor_init(scans, scane);
 
     return 0;
 }
 
-static uint8_t isputs = 0;
+static u8 isputs = 0;
 void vga_putchar(const char c)
 {
     if(c == '\n')

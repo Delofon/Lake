@@ -11,24 +11,9 @@
 void halt();
 void hang();
 
-void kmain(uint32_t mbi, uint32_t magic)
+void kmain()
 {
-#if 0
-    // test display
-    const char *b64 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
-    for(int i = 0; i < 25; i++)
-    {
-        for(int j = 0; j < 80; j++)
-        {
-            putchar(b64[(j+i)%64]);
-        }
-    }
-#else
     printf("Lake\n\n");
-#endif
-
-    ps2_init();
-    kb_init();
 
     while(1)
     {

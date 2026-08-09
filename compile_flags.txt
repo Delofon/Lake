@@ -1,6 +1,7 @@
 -Ilibc/
 -Ikernel/
 -Iexternal/include/
+-Iinclude/
 -D__i386__
 -U__linux__
 -m32

@@ -45,6 +45,7 @@ SECTIONS
         *(.bss)
     }
 
+    lake_vla_end = .;
     lake_lma_end = . - lake_vla_start;
 }
 

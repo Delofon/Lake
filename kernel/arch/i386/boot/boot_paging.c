@@ -2,35 +2,35 @@
 
 #include <arch/i386/mm/mm.h>
 
-// linker.ld
-extern const void lake_lma_start;
-extern const void lake_lma_end;
-extern const void lake_vla_start;
+#include "linker.h"
+#include "../vga.h"
 
-__attribute__((section(".trampoline.text")))
-int init_kpd(uint32_t *kpd, uint32_t *kpt1)
+sect(".trampoline.text")
+int init_kpd(u32 *kpd, u32 *kpt1)
 {
     // map lake
-    for(uint32_t pg = (uint32_t)&lake_lma_start;
-                 pg < (uint32_t)&lake_lma_end;
-                 pg += 4096)
+    for(u32 pg = usllake;
+            pg < uellake;
+            pg += 4096)
     {
-        uint16_t pti = PG_TBL_IDX(pg);
+        u16 pti = PG_TBL_IDX(pg);
         if(pti > 1023) return 1;
 
         kpt1[pti] = (pg) | PG_WR | PG_P;
     }
 
     // map vga to the last available addr
-    kpt1[0x3ff] = 0xb8000 | PG_WR | PG_P | PG_PCD;
+    kpt1[PG_IDX_MAX] = 0xb8000 | PG_WR | PG_P | PG_PCD;
 
     // identity page trampoline
-    kpd[0] = (uint32_t)(kpt1) | PG_WR | PG_P;
+    kpd[0] = (up)(kpt1) | PG_WR | PG_P;
 
     // put lake into higher half
+    u16 pdi = PG_DIR_IDX(usvlake);
+    kpd[pdi] = (up)(kpt1) | PG_WR | PG_P;
 
-    uint16_t pdi = PG_DIR_IDX((uint32_t)&lake_vla_start);
-    kpd[pdi] = (uint32_t)(kpt1) | PG_WR | PG_P;
+    // recursion
+    kpd[PG_IDX_MAX] = (up)kpd | PG_WR | PG_P;
 
     return 0;
 }

@@ -4,7 +4,7 @@ section .text
 
 extern panic
 
-global vga_cursor_init
+global vga_cursor_init:function
 vga_cursor_init:
     push ebx
 
