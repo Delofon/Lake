@@ -21,8 +21,8 @@ typedef union
 
 ttystate_t ttystate = { .state = 0u };
 
-const char lkeytoascii[NUM_WRKEYS] = "\0001234567890-=qwertyuiop[]asdfghjkl;'\\zxcvbnm,./ \n`";
-const char ukeytoascii[NUM_WRKEYS] = "\000!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>? \n~";
+const nonstring char lkeytoascii[NUM_WRKEYS] = "\0001234567890-=qwertyuiop[]asdfghjkl;'\\zxcvbnm,./ \n`";
+const nonstring char ukeytoascii[NUM_WRKEYS] = "\000!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>? \n~";
 
 void processevent(event_t event)
 {

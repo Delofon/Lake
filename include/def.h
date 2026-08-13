@@ -3,16 +3,23 @@
 #ifndef DEF_H_
 #define DEF_H_
 
+#include <stdint.h>
+
 // compile-time assertion
 #define ct_ass _Static_assert
 
 #define sect(x) __attribute__((section(x)))
-
-#include <stddef.h>
-#include <stdbool.h>
-#include <stdint.h>
+#define nonstring __attribute__((nonstring))
 
 // More pleasant <stdint.h>
+
+typedef long long llong;
+typedef unsigned long long ullong;
+
+typedef unsigned int uint;
+typedef unsigned short ushort;
+typedef unsigned long ulong;
+typedef unsigned char uchar;
 
 typedef uintptr_t up;
 typedef intptr_t  ip;
@@ -49,6 +56,10 @@ typedef int_least8_t  i8l;
 typedef int_least16_t i16l;
 typedef int_least32_t i32l;
 typedef int_least64_t i64l;
+
+// because why not.
+typedef void u0;
+typedef void i0;
 
 #endif
 

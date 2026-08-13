@@ -34,7 +34,7 @@ extern size_t vga_y;
 extern u8 vga_color;
 extern u16 *vga_buf;
 
-const void *vga_lma = 0xb8000
+#define vga_lma ((void *)0xb8000)
 
 u8 vga_init(void *vga, u8 scans, u8 scane);
 void vga_putchar(const char c);

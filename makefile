@@ -4,6 +4,8 @@ CC := i686-elf-gcc
 AR := i686-elf-ar
 AS := nasm
 
+QEMU := qemu-system-i386
+
 BUILD := build
 KERNEL := kernel
 LIBC := libc
@@ -83,19 +85,19 @@ grub-iso: $(BUILD)/lake.iso
 
 .PHONY: qemu
 qemu: grub-iso
-> qemu-system-i386 $(BUILD)/lake.iso
+> $(QEMU) $(BUILD)/lake.iso
 
 .PHONY: gdb
 gdb: grub-iso
-> qemu-system-i386 -s -S $(BUILD)/lake.iso
+> $(QEMU) -s -S $(BUILD)/lake.iso
 
 .PHONY: qemu-dint
-qemu-dint: grub-iso
-> qemu-system-i386 $(BUILD)/lake.iso -d int --no-reboot
+dint: grub-iso
+> $(QEMU) $(BUILD)/lake.iso -d int --no-reboot
 
 .PHONY: qemu-log
-qemu-log: grub-iso
-> qemu-system-i386 $(BUILD)/lake.iso -d int,cpu_reset --no-reboot
+log: grub-iso
+> $(QEMU) $(BUILD)/lake.iso -d int,cpu_reset --no-reboot
 
 .PHONY: clean
 clean:

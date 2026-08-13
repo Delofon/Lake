@@ -1,7 +1,8 @@
 section .bss
+align 4
 global regs
 regs:
-    resd 8
+    resd 9
 
 section .text
 global savereg
@@ -22,6 +23,9 @@ savereg:
     add esp, 8
     mov [regs+7*4], esp
     sub esp, 8
+
+    mov eax, cr2
+    mov [regs+8*4], eax
 
     ret
 

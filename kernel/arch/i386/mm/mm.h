@@ -84,7 +84,11 @@ typedef union
 } pde_t;
 ct_ass(sizeof(pde_t) == 4, "Invalid pt_t size");
 
-#define PG_IDX_MAX 0x3ff
+#define PG_IDX_MAX  0x3ff
+#define PG_DIR_SIZE 0x400
+
+extern up lomem;
+extern up himem;
 
 void  pmm_init();
 void *pmm_alloc();

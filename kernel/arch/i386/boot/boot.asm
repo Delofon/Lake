@@ -27,14 +27,35 @@ align 8
     dd 8
 MB2_END:
 
+; extern
+
+extern setup_gdt
+extern setgdt
+
+extern setup_idt
+extern setidt
+
+extern pic_init
+extern init_kpd
+extern i386_init
+extern kmain
+
+extern halt
+
+extern gdtp
+extern idtp
+
+; linker.ld
+extern lake_vla_start
+
+; extern
+
 section .trampoline.text
 
 global trampoline:function
 trampoline:
-    ; linker.ld
-    extern lake_vla_start
 
-    mov esp, stack
+    lea esp, [stack]
     sub esp, lake_vla_start
 
     push eax
@@ -42,15 +63,12 @@ trampoline:
 
     lea edi, [kpt1]
     sub edi, lake_vla_start
-    push edi
-
     lea ebx, [kpd]
     sub ebx, lake_vla_start
+
+    push edi
     push ebx
-
-    extern init_kpd
     call init_kpd
-
     add esp, 8
 
     test eax, eax
@@ -86,25 +104,9 @@ resb 16384
 stack:
 align 4096
 kpd:
-resd 1024
+resb 4096
 kpt1:
-resd 1024
-
-section .text
-
-extern setup_gdt
-extern setgdt
-
-extern setup_idt
-extern setidt
-
-extern vga_init
-extern pic_init
-extern kmain
-extern halt
-
-extern gdtp
-extern idtp
+resb 4096
 
 section .text
 
@@ -144,7 +146,6 @@ start:
     sti
 
     ; do more i386 specific initialisation
-    extern i386_init
     call i386_init
 
     ; booting finished, give control to the main kernel code

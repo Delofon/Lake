@@ -14,7 +14,7 @@ int init_kpd(u32 *kpd, u32 *kpt1)
             pg += 4096)
     {
         u16 pti = PG_TBL_IDX(pg);
-        if(pti > 1023) return 1;
+        if(pti >= PG_DIR_SIZE) return 1;
 
         kpt1[pti] = (pg) | PG_WR | PG_P;
     }

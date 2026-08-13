@@ -7,6 +7,7 @@ SECTIONS
     lake_lma_start = .;
     lake_vla_start = 0xc0000000;
 
+    strampoline = .;
     .multiboot2 ALIGN(4K) :
     {
         *(.multiboot2)
@@ -17,6 +18,7 @@ SECTIONS
         *(.trampoline.data)
         *(.trampoline.text)
     }
+    etrampoline = .;
 
     . += lake_vla_start;
 

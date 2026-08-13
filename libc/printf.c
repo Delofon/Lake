@@ -96,19 +96,12 @@ static inline int pad(padding_e padding, int num)
 
     char c;
 
-    switch(padding)
-    {
-        case PADDING_SPACE:
-        case PADDING_RIGHT:
-            c = ' ';
-            break;
-        case PADDING_ZERO:
-            c = '0';
-            break;
-        default:
-            return -1;
-
-    }
+    if(padding == PADDING_SPACE || padding == PADDING_RIGHT)
+        c = ' ';
+    else if(padding == PADDING_ZERO)
+        c = '0';
+    else
+        return -1;
 
     for(int i = 0; i < num; i++)
     {
@@ -127,7 +120,7 @@ static inline void rev(char *s, size_t sz)
     }
 }
 
-const char dig[32] = "0123456789abcdef0123456789ABCDEF";
+const nonstring char dig[32] = "0123456789abcdef0123456789ABCDEF";
 const char *DIG = dig+16;
 static inline int fmt_int(arg_t arg, int conv, padding_e padding, int width)
 {
@@ -147,30 +140,19 @@ static inline int fmt_int(arg_t arg, int conv, padding_e padding, int width)
 
     if(ll < 0 && conv == 0)
     {
-        switch(arg.type)
+        if(arg.type == INT  ||
+           arg.type == LONG ||
+           arg.type == LLONG)
         {
-            case INT:
-            case LONG:
-            case LLONG:
-                // FIXME: write into s[] instead
-                putchar('-');
-                bytes++;
-                ull = -ll;
-                break;
-            default:
-                break;
+            // FIXME: write into s[] instead
+            putchar('-');
+            bytes++;
+            ull = -ll;
         }
     }
 
-    switch(arg.type)
-    {
-        case INT:
-        case LONG:
-            ull = ul;
-            break;
-        default:
-            break;
-    }
+    if(arg.type == INT || arg.type == LONG)
+        ull = ul;
 
     while(ull != 0)
     {
@@ -222,6 +204,7 @@ int vprintf(const char *fmt, va_list va)
 
     padding_e padding = PADDING_SPACE;
     pos_e pos = POS_NONE;
+    (void)pos;
     int width = 0;
 
     arg_t arg = { .i = 0, .type = INT };

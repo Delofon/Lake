@@ -2,6 +2,7 @@
 -Ikernel/
 -Iexternal/include/
 -Iinclude/
+-include def.h
 -D__i386__
 -U__linux__
 -m32

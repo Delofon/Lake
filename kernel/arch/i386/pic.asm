@@ -17,13 +17,13 @@ pic_init:
     mov al, 0 ; io sleep
     out 0x80, al
 
-    mov al, 0x20 ; offset for IRQ 0 - 7
+    mov al, 32 ; offset for IRQ 0 - 7
     out MPIC_DATA, al
 
     mov al, 0
     out 0x80, al
 
-    mov al, 0x28 ; offset for IRQ 8 - 15
+    mov al, 40 ; offset for IRQ 8 - 15
     out SPIC_DATA, al
 
     mov al, 0
