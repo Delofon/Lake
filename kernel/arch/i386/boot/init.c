@@ -8,10 +8,10 @@
 
 #include <multiboot2.h>
 
-void *mbt_next(struct multiboot_tag *tag)
+static inline void *mbt_next(struct multiboot_tag *tag)
 {
     up p = (up)tag;
-    p += tag->size + 8;
+    p += tag->size + 7;
     p &= ~0b111;
     return (void *)p;
 }
@@ -19,7 +19,7 @@ void *mbt_next(struct multiboot_tag *tag)
 void multiboot2_init(void *mbi)
 {
     u32 sz = *(u32*)mbi; // first field of *mbi is a u32 size
-    void *p = mbi+4;
+    void *p = mbi+8;
 
     while(p < (void*)mbi+sz)
     {
@@ -36,6 +36,8 @@ void multiboot2_init(void *mbi)
                 printf("cmdline\n");
                 break;
         }
+
+        p = mbt_next(p);
     }
 }
 

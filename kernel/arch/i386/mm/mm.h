@@ -15,33 +15,34 @@
 
 #define PG_DIR_MASK 0xffc00000
 #define PG_TBL_MASK 0x003ff000
-#define PG_PGE_MASK 0x00000fff
 
 #define PG_DIR_IDX(x) (((x) & PG_DIR_MASK) >> 22)
 #define PG_TBL_IDX(x) (((x) & PG_TBL_MASK) >> 12)
 
+#define PG_SIZE 4096
+
 typedef struct
 {
-    u8 g   : 1;
-    u8 sz  : 1;
-    u8 d   : 1;
-    u8 a   : 1;
-    u8 pcd : 1;
-    u8 wt  : 1;
-    u8 us  : 1;
-    u8 wr  : 1;
     u8 p   : 1;
+    u8 wr  : 1;
+    u8 us  : 1;
+    u8 wt  : 1;
+    u8 pcd : 1;
+    u8 a   : 1;
+    u8 d   : 1;
+    u8 sz  : 1;
+    u8 g   : 1;
 } ptflags_t;
 typedef struct
 {
-    u8 sz  : 1;
-    u8 avl : 1;
-    u8 a   : 1;
-    u8 pcd : 1;
-    u8 wt  : 1;
-    u8 us  : 1;
-    u8 wr  : 1;
     u8 p   : 1;
+    u8 wr  : 1;
+    u8 us  : 1;
+    u8 wt  : 1;
+    u8 pcd : 1;
+    u8 a   : 1;
+    u8 avl : 1;
+    u8 sz  : 1;
 } pdflags_t;
 
 typedef union
@@ -49,18 +50,18 @@ typedef union
     u32 i;
     struct
     {
-        u32 base : 20;
-        u8  avl  : 3;
-
-        u8 g   : 1;
-        u8 sz  : 1;
-        u8 d   : 1;
-        u8 a   : 1;
-        u8 pcd : 1;
-        u8 wt  : 1;
-        u8 us  : 1;
-        u8 wr  : 1;
         u8 p   : 1;
+        u8 wr  : 1;
+        u8 us  : 1;
+        u8 wt  : 1;
+        u8 pcd : 1;
+        u8 a   : 1;
+        u8 d   : 1;
+        u8 sz  : 1;
+        u8 g   : 1;
+
+        u8  avl  : 3;
+        u32 base : 20;
     };
 } pte_t;
 ct_ass(sizeof(pte_t) == 4, "Invalid pg_t size");
@@ -69,17 +70,17 @@ typedef union
     u32 i;
     struct
     {
-        u32 base : 20;
-        u8  avl1 : 4;
-
-        u8 sz  : 1;
-        u8 avl2: 1;
-        u8 a   : 1;
-        u8 pcd : 1;
-        u8 wt  : 1;
-        u8 us  : 1;
-        u8 wr  : 1;
         u8 p   : 1;
+        u8 wr  : 1;
+        u8 us  : 1;
+        u8 wt  : 1;
+        u8 pcd : 1;
+        u8 a   : 1;
+        u8 avl2: 1;
+        u8 sz  : 1;
+
+        u8  avl1 : 4;
+        u32 base : 20;
     };
 } pde_t;
 ct_ass(sizeof(pde_t) == 4, "Invalid pt_t size");

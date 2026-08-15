@@ -54,7 +54,6 @@ section .trampoline.text
 
 global trampoline:function
 trampoline:
-
     lea esp, [stack]
     sub esp, lake_vla_start
 
@@ -112,10 +111,6 @@ section .text
 
 global start:function
 start:
-    ; get rid of identity
-    mov dword [kpd], 0x0
-    invlpg [0]
-
     mov esp, stack
     mov ebp, esp
 

@@ -8,15 +8,15 @@
 sect(".trampoline.text")
 int init_kpd(u32 *kpd, u32 *kpt1)
 {
-    // map lake
-    for(u32 pg = usllake;
-            pg < uellake;
-            pg += 4096)
+    // map 4mb
+    for(u32 i = 0;
+            i < PG_DIR_SIZE;
+            i++)
     {
-        u16 pti = PG_TBL_IDX(pg);
-        if(pti >= PG_DIR_SIZE) return 1;
-
-        kpt1[pti] = (pg) | PG_WR | PG_P;
+        pde_t *pde = (void*)(kpt1+i);
+        pde->base = i;
+        pde->wr = 1;
+        pde->p  = 1;
     }
 
     // map vga to the last available addr
